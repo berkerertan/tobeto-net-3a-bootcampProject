@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,9 @@ namespace Entities.Concretes
             
         }
 
-        public Instructor(string companyName)
+        public Instructor(int id,string companyName)
         {
+            Id = id;
             CompanyName = companyName;
         }
 

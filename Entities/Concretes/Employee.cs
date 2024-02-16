@@ -13,8 +13,9 @@ namespace Entities.Concretes
             
         }
 
-        public Employee(string position)
+        public Employee(int id,string position)
         {
+            Id = id;
             Position = position;
         }
 

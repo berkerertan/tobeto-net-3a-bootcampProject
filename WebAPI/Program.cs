@@ -9,6 +9,7 @@ namespace WebAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDataAccessServices(builder.Services);
 
             var app = builder.Build();
 

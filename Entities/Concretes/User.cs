@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +7,16 @@ using System.Threading.Tasks;
 
 namespace Entities.Concretes
 {
-    public class User
+    public class User : BaseEntity<int>
     {
         public User()
         {
             
         }
 
-        public User(int userId, string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
+        public User(int id,int userId, string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
         {
+            Id = id;
             UserId = userId;
             UserName = userName;
             FirstName = firstName;

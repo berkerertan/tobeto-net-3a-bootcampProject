@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Abstracts\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business\Business.csproj" />
+    <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>
 
 </Project>

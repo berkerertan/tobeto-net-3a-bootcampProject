@@ -13,8 +13,9 @@ namespace Entities.Concretes
             
         }
 
-        public Applicant(string about)
+        public Applicant(int id,string about)
         {
+            Id = id;
             About = about;
         }
 
