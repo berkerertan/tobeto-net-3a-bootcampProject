@@ -15,14 +15,13 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
         {
             builder.ToTable("Users").HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("Id");
-            builder.Property(x => x.UserId).HasColumnName("Id");
-            builder.Property(x => x.UserName).HasColumnName("Id");
-            builder.Property(x => x.FirstName).HasColumnName("Id");
-            builder.Property(x => x.LastName).HasColumnName("Id");
-            builder.Property(x => x.DateOfBirth).HasColumnName("Id");
-            builder.Property(x => x.NationalIdentity).HasColumnName("Id");
-            builder.Property(x => x.Email).HasColumnName("Id");
-            builder.Property(x => x.Password).HasColumnName("Id");
+            builder.Property(x => x.UserName).HasColumnName("UserName");
+            builder.Property(x => x.FirstName).HasColumnName("FirstName");
+            builder.Property(x => x.LastName).HasColumnName("LastName");
+            builder.Property(x => x.DateOfBirth).HasColumnName("DateOfBirth");
+            builder.Property(x => x.NationalIdentity).HasColumnName("NationalIdentity");
+            builder.Property(x => x.Email).HasColumnName("Email");
+            builder.Property(x => x.Password).HasColumnName("Password");
 
         }
     }

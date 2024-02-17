@@ -16,7 +16,8 @@ public static class DataAccessServiceRegistration
         IConfiguration configuration)
     {
         services.AddDbContext<BaseDbContext>
-            (options => options.UseSqlServer(configuration.GetConnectionString("TobetoCompanyConnectionString")));
+            (options => options.UseSqlServer(configuration.
+            GetConnectionString("TobetoCompanyConnectionString")));
         return services;
     }
 }

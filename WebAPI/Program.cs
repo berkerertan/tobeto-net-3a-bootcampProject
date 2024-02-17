@@ -1,3 +1,4 @@
+using DataAccess;
 namespace WebAPI
 {
     public class Program
@@ -9,6 +10,7 @@ namespace WebAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDataAccessServices(builder.Configuration);
 
             var app = builder.Build();
 
