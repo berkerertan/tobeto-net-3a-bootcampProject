@@ -8,6 +8,6 @@ namespace Core.DataAccess
 {
     public interface IQuery<T>
     {
-        IQueryable<T> Query<T>();
+        IQueryable<T> Query();
     }
 }
