@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using Business.Requests.Instructors;
 using Business.Responses.Instructors;
 using Business.Responses.Users;
 using DataAccess.Abstracts;
@@ -21,7 +22,7 @@ namespace Business.Concretes
         {
             _instructorRepository = instructorRepository;
         }
-        public async Task<CreateInstructorResponse> AddAsync(CreateInstructorResponse request)
+        public async Task<CreateInstructorResponse> AddAsync(CreateInstructorRequest request)
         {
             Instructor instructor = new Instructor();
             instructor.FirstName = request.FirstName;
@@ -40,6 +41,7 @@ namespace Business.Concretes
             response.CompanyName = instructor.CompanyName;
             return response;
         }
+
 
         public async Task DeleteAsync(int id)
         {

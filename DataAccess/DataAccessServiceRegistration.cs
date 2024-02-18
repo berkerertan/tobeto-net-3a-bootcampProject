@@ -22,6 +22,9 @@ public static class DataAccessServiceRegistration
             GetConnectionString("TobetoCompanyConnectionString")));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IApplicantRepository, ApplicantRepository>();
+        services.AddScoped<IInstructorRepository, InstructorRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
         return services;
     }
