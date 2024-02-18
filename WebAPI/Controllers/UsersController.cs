@@ -44,12 +44,16 @@ namespace WebAPI.Controllers
         {
             if (id != user.UserId)
             {
-                return BadRequest();//HTTP yanıt kodu olarak 400 Bad Request kodunu döndürür. Kullanıcı bulunamadı.
+                return BadRequest("");//HTTP yanıt kodu olarak 400 Bad Request kodunu döndürür. Kullanıcı bulunamadı.
             }
 
             var updatedUser = await _userService.UpdateAsync(user);
+            if (updatedUser == null)
+            {
+                return NotFound("Kullanıcı bulunamadı");//HTTP yanıt kodu olarak 404 Not Found kodunu döndürür. Kullanıcı bulunamadı.
+            }
 
-            return Ok("Başarıyla güncellendi");
+            return Ok("Başarıyla güncellendi");//HTTP yanıt kodu olarak 200 OK kodunu döndürür. Kullanıcı başarıyla güncellendi.
         }
 
         [HttpDelete("{id}")]
@@ -57,7 +61,7 @@ namespace WebAPI.Controllers
         {
             await _userService.DeleteAsync(id);
 
-            return Ok("Başarıyla silindi");
+            return Ok("Kullanıcı başarıyla silindi");
         }
     }
 }

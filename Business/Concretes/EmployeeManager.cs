@@ -64,6 +64,7 @@ namespace Business.Concretes
             var UpdatedEmployee = await _employeeRepository.Update(employee);
             return new UpdateEmployeeResponse
             {
+                UserName = UpdatedEmployee.UserName,
                 FirstName = UpdatedEmployee.FirstName,
                 LastName = UpdatedEmployee.LastName,
                 Email = UpdatedEmployee.Email,

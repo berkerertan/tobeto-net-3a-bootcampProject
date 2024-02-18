@@ -13,10 +13,10 @@ namespace Business.Abstracts
 {
     public interface IApplicantService
     {
-        Task<CreateApplicantsResponse> AddAsync(CreateApplicantRequest request);
+        Task<CreateApplicantResponse> AddAsync(CreateApplicantRequest request);
         Task<List<Applicant>> GetAll();
         Task<Applicant> GetByIdAsync(int id);
-        Task<UpdateApplicantsResponse> UpdateAsync(Applicant aplicant);
+        Task<UpdateApplicantResponse> UpdateAsync(Applicant aplicant);
         Task DeleteAsync(int id);
     }
 }

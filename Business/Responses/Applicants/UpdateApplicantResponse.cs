@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Responses.Applicants
 {
-    public class UpdateApplicantsResponse
+    public class UpdateApplicantResponse
     {
         public int UserId { get; set; }
         public string UserName { get; set; }

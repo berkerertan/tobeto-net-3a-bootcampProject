@@ -1,4 +1,5 @@
-﻿using Business.Requests.Users;
+﻿using Business.Requests.Instructors;
+using Business.Requests.Users;
 using Business.Responses.Instructors;
 using Business.Responses.Users;
 using Entities.Concretes;
@@ -12,7 +13,7 @@ namespace Business.Abstracts
 {
     public interface IInstructorService
     {
-        Task<CreateInstructorResponse> AddAsync(CreateInstructorResponse request);
+        Task<CreateInstructorResponse> AddAsync(CreateInstructorRequest request);
         Task<List<Instructor>> GetAll();
         Task<Instructor> GetByIdAsync(int id);
         Task<UpdateInstructorResponse> UpdateAsync(Instructor instructor);
