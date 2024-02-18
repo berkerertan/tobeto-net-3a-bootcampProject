@@ -1,4 +1,5 @@
 using DataAccess;
+using Business;
 namespace WebAPI
 {
     public class Program
@@ -8,20 +9,37 @@ namespace WebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddControllers();
             builder.Services.AddDataAccessServices(builder.Configuration);
+            builder.Services.AddBusinessServices();
 
-            var app = builder.Build();
+            try
+            {
+                var app = builder.Build();
+                // Configure the HTTP request pipeline.
+                if (app.Environment.IsDevelopment())
+                {
+                    app.UseSwagger();
+                    app.UseSwaggerUI();
+                }
 
-            // Configure the HTTP request pipeline.
-
-            app.UseAuthorization();
+                app.UseAuthorization();
 
 
-            app.MapControllers();
+                app.MapControllers();
 
-            app.Run();
+                app.Run();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Hata oluþtu: " + ex.Message);
+                throw; // Hatanýn daha detaylý incelenmesi için istisnayý yeniden fýrlatýn
+            }
+
+            
         }
     }
 }

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Business.Abstracts
 {
-    public interface IUserService
+    public interface IEmployeeService
     {
-        Task<CreateUserResponse> AddAsync(CreateUserRequest request);
-        Task<List<User>> GetAll();
-        Task<User> GetByIdAsync(int id);
-        Task<UpdateUserResponse> UpdateAsync(User user);
+        Task<CreateEmployeeResponse> AddAsync(CreateEmployeeRequest request);
+        Task<List<Employee>> GetAll();
+        Task<Employee> GetByIdAsync(int id);
+        Task<UpdateEmployeeResponse> UpdateAsync(Employee employee);
         Task DeleteAsync(int id);
     }
 }
