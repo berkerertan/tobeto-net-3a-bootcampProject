@@ -8,6 +8,6 @@ namespace Business.Requests.Aplicants
 {
     public class GetApplicantRequest
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
     }
 }

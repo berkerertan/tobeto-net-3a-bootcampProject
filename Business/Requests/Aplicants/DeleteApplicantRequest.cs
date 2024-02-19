@@ -8,6 +8,6 @@ namespace Business.Requests.Aplicants
 {
     public class DeleteApplicantRequest
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
     }
 }

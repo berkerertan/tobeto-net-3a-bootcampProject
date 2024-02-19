@@ -8,6 +8,6 @@ namespace Business.Requests.Instructors
 {
     public class GetInstructorRequest
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
     }
 }

@@ -26,14 +26,14 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Employee>>> GetAll()
         {
-            var employees = await _employeeService.GetAll();
+            var employees = await _employeeService.GetAllAsync();
             return Ok(employees);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, Employee employee)
         {
-            if (id != employee.UserId)
+            if (id != employee.Id)
             {
                 return BadRequest("Geçersiz çalışan kimliği");
             }

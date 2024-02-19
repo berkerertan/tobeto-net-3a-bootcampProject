@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Instructor>>> GetAll()
         {
-            var instructors = await _instructorService.GetAll();
+            var instructors = await _instructorService.GetAllAsync();
             return Ok(instructors);
         }
 
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, Instructor instructor)
         {
-            if (id != instructor.UserId)
+            if (id != instructor.Id)
             {
                 return BadRequest("Geçersiz eğitmen kimliği");
             }

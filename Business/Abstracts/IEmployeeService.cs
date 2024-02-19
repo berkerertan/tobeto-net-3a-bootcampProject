@@ -12,7 +12,7 @@ namespace Business.Abstracts
     public interface IEmployeeService
     {
         Task<CreateEmployeeResponse> AddAsync(CreateEmployeeRequest request);
-        Task<List<Employee>> GetAll();
+        Task<List<Employee>> GetAllAsync();
         Task<Employee> GetByIdAsync(int id);
         Task<UpdateEmployeeResponse> UpdateAsync(Employee employee);
         Task DeleteAsync(int id);

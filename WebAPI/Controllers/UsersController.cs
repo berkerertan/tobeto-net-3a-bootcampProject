@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> getAll()
         {
-            return Ok(await _userService.GetAll());
+            return Ok(await _userService.GetAllAsync());
         }
 
         [HttpGet("{id}")]
@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, User user)
         {
-            if (id != user.UserId)
+            if (id != user.Id)
             {
                 return BadRequest("");//400 Bad Request kodunu döndürür. Kullanıcı bulunamadı.
             }

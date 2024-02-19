@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Business.Responses.Users
 {
-    internal class DeleteEmployeeResponse
+    public class DeleteEmployeeResponse
     {
+        public bool IsSuccess { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

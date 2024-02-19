@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20240217162903_mig1")]
-    partial class mig1
+    [Migration("20240219135925_mig6")]
+    partial class mig6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,9 +71,6 @@ namespace DataAccess.Migrations
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()

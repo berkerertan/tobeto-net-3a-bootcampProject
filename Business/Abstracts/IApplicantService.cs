@@ -14,7 +14,7 @@ namespace Business.Abstracts
     public interface IApplicantService
     {
         Task<CreateApplicantResponse> AddAsync(CreateApplicantRequest request);
-        Task<List<Applicant>> GetAll();
+        Task<List<Applicant>> GetAllAsync();
         Task<Applicant> GetByIdAsync(int id);
         Task<UpdateApplicantResponse> UpdateAsync(Applicant aplicant);
         Task DeleteAsync(int id);

@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Applicant>>> GetAll()
         {
-            var applicants = await _applicantService.GetAll();
+            var applicants = await _applicantService.GetAllAsync();
             return Ok(applicants);
         }
 
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, Applicant applicant)
         {
-            if (id != applicant.UserId)
+            if (id != applicant.Id)
             {
                 return BadRequest("Geçersiz başvuru kimliği");
             }

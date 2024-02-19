@@ -13,10 +13,9 @@ namespace Entities.Concretes
             
         }
 
-        public Employee(int id, int userId, string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password, string position)
+        public Employee(string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password, string position)
         {
-            Id = id;
-            UserId = userId;
+
             UserName = userName;
             FirstName = firstName;
             LastName = lastName;

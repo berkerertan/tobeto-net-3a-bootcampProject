@@ -14,7 +14,7 @@ namespace Business.Abstracts
     public interface IInstructorService
     {
         Task<CreateInstructorResponse> AddAsync(CreateInstructorRequest request);
-        Task<List<Instructor>> GetAll();
+        Task<List<Instructor>> GetAllAsync();
         Task<Instructor> GetByIdAsync(int id);
         Task<UpdateInstructorResponse> UpdateAsync(Instructor instructor);
         Task DeleteAsync(int id);

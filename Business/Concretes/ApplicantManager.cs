@@ -45,21 +45,21 @@ namespace Business.Concretes
 
         public async Task DeleteAsync(int id)
         {
-            var applicant = await _applicantRepository.GetAsync(a => a.UserId == id);
+            var applicant = await _applicantRepository.GetAsync(a => a.Id == id);
             if (applicant != null)
             {
                 await _applicantRepository.DeleteAsync(applicant);
             }
         }
 
-        public async Task<List<Applicant>> GetAll()
+        public async Task<List<Applicant>> GetAllAsync()
         {
             return await _applicantRepository.GetAllAsync();
         }
 
         public async Task<Applicant> GetByIdAsync(int id)
         {
-            return await _applicantRepository.GetAsync(a => a.UserId == id);
+            return await _applicantRepository.GetAsync(a => a.Id == id);
         }
 
         public async Task<UpdateApplicantResponse> UpdateAsync(Applicant aplicant)

@@ -12,7 +12,7 @@ namespace Business.Abstracts
     public interface IUserService
     {
         Task<CreateUserResponse> AddAsync(CreateUserRequest request);
-        Task<List<User>> GetAll();
+        Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(int id);
         Task<UpdateUserResponse> UpdateAsync(User user);
         Task DeleteAsync(int id);
