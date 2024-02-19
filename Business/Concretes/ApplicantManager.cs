@@ -31,7 +31,7 @@ namespace Business.Concretes
             aplicant.NationalIdentity = request.NationalIdentity;
             aplicant.Password = request.Password;
             aplicant.About = request.About;
-            await _applicantRepository.Add(aplicant);
+            await _applicantRepository.AddAsync(aplicant);
 
             CreateApplicantResponse response = new CreateApplicantResponse();
             response.UserName = aplicant.UserName;
@@ -45,26 +45,26 @@ namespace Business.Concretes
 
         public async Task DeleteAsync(int id)
         {
-            var applicant = await _applicantRepository.Get(a => a.UserId == id);
+            var applicant = await _applicantRepository.GetAsync(a => a.UserId == id);
             if (applicant != null)
             {
-                await _applicantRepository.Delete(applicant);
+                await _applicantRepository.DeleteAsync(applicant);
             }
         }
 
         public async Task<List<Applicant>> GetAll()
         {
-            return await _applicantRepository.GetAll();
+            return await _applicantRepository.GetAllAsync();
         }
 
         public async Task<Applicant> GetByIdAsync(int id)
         {
-            return await _applicantRepository.Get(a => a.UserId == id);
+            return await _applicantRepository.GetAsync(a => a.UserId == id);
         }
 
         public async Task<UpdateApplicantResponse> UpdateAsync(Applicant aplicant)
         {
-            var updatedAplicant = await _applicantRepository.Update(aplicant);
+            var updatedAplicant = await _applicantRepository.UpdateAsync(aplicant);
             return new UpdateApplicantResponse
             {
                 UserName = updatedAplicant.UserName,

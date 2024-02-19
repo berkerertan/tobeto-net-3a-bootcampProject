@@ -32,7 +32,7 @@ namespace Business.Concretes
             instructor.NationalIdentity = request.NationalIdentity;
             instructor.Password = request.Password;
             instructor.CompanyName = request.CompanyName;
-            await _instructorRepository.Add(instructor);
+            await _instructorRepository.AddAsync(instructor);
 
             CreateInstructorResponse response = new CreateInstructorResponse();
             response.UserName = instructor.UserName;
@@ -47,26 +47,26 @@ namespace Business.Concretes
 
         public async Task DeleteAsync(int id)
         {
-            var instructor = await _instructorRepository.Get(i => i.UserId == id);
+            var instructor = await _instructorRepository.GetAsync(i => i.UserId == id);
             if (instructor != null)
             {
-                await _instructorRepository.Delete(instructor);
+                await _instructorRepository.DeleteAsync(instructor);
             }
         }
 
         public async Task<List<Instructor>> GetAll()
         {
-            return await _instructorRepository.GetAll();
+            return await _instructorRepository.GetAllAsync();
         }
 
         public async Task<Instructor> GetByIdAsync(int id)
         {
-            return await _instructorRepository.Get(i=>i.UserId == id);
+            return await _instructorRepository.GetAsync(i=>i.UserId == id);
         }
 
         public async Task<UpdateInstructorResponse> UpdateAsync(Instructor instructor)
         {
-            var updatedInstructor = await _instructorRepository.Update(instructor);
+            var updatedInstructor = await _instructorRepository.UpdateAsync(instructor);
 
             return new UpdateInstructorResponse
             {

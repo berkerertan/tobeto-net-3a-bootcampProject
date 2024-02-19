@@ -27,7 +27,7 @@ namespace Business.Concretes
             user.Email = request.Email;
             user.NationalIdentity = request.NationalIdentity;
             user.Password = request.Password;
-            await _userRepository.Add(user);
+            await _userRepository.AddAsync(user);
 
             CreateUserResponse response = new CreateUserResponse();
             response.UserName = user.UserName;
@@ -41,26 +41,26 @@ namespace Business.Concretes
 
         public async Task DeleteAsync(int id)
         {
-            var user = await _userRepository.Get(u=>u.UserId == id);
+            var user = await _userRepository.GetAsync(u=>u.UserId == id);
             if (user != null)
             {
-                await _userRepository.Delete(user);
+                await _userRepository.DeleteAsync(user);
             }
         }
 
         public async Task<List<User>> GetAll()
         {
-            return await _userRepository.GetAll();
+            return await _userRepository.GetAllAsync();
         }
 
         public async Task<User> GetByIdAsync(int id)
         {
-           return await _userRepository.Get(u=> u.UserId == id);
+           return await _userRepository.GetAsync(u=> u.UserId == id);
         }
 
         public async Task<UpdateUserResponse> UpdateAsync(User user)
         {
-            var UpdatedUser = await _userRepository.Update(user);
+            var UpdatedUser = await _userRepository.UpdateAsync(user);
             return new UpdateUserResponse
             {
                 UserName = user.UserName,

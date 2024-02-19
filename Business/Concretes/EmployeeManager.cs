@@ -30,7 +30,7 @@ namespace Business.Concretes
             employee.NationalIdentity = request.NationalIdentity;
             employee.Password = request.Password;
             employee.Position = request.Position;
-            await _employeeRepository.Add(employee);
+            await _employeeRepository.AddAsync(employee);
 
             CreateEmployeeResponse response = new CreateEmployeeResponse();
             response.UserName = employee.UserName;
@@ -44,26 +44,26 @@ namespace Business.Concretes
 
         public async Task DeleteAsync(int id)
         {
-            var employee = await _employeeRepository.Get(e => e.UserId == id);
+            var employee = await _employeeRepository.GetAsync(e => e.UserId == id);
             if (employee !=null)
             {
-                await _employeeRepository.Delete(employee);
+                await _employeeRepository.DeleteAsync(employee);
             }
         }
 
         public async Task<List<Employee>> GetAll()
         {
-            return await _employeeRepository.GetAll();
+            return await _employeeRepository.GetAllAsync();
         }
 
         public async Task<Employee> GetByIdAsync(int id)
         {
-            return await _employeeRepository.Get(e=>e.UserId == id);
+            return await _employeeRepository.GetAsync(e=>e.UserId == id);
         }
 
         public async Task<UpdateEmployeeResponse> UpdateAsync(Employee employee)
         {
-            var UpdatedEmployee = await _employeeRepository.Update(employee);
+            var UpdatedEmployee = await _employeeRepository.UpdateAsync(employee);
             return new UpdateEmployeeResponse
             {
                 UserName = UpdatedEmployee.UserName,
