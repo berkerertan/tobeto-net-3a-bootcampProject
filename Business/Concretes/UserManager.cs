@@ -21,6 +21,7 @@ namespace Business.Concretes
         public async Task<CreateUserResponse> AddAsync(CreateUserRequest request)
         {
             User user = new User();
+            user.UserName = request.UserName;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Email = request.Email;
@@ -29,6 +30,7 @@ namespace Business.Concretes
             await _userRepository.Add(user);
 
             CreateUserResponse response = new CreateUserResponse();
+            response.UserName = user.UserName;
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
             response.Email = user.Email;

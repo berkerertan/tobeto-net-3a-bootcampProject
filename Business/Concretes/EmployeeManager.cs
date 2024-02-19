@@ -23,6 +23,7 @@ namespace Business.Concretes
         public async Task<CreateEmployeeResponse> AddAsync(CreateEmployeeRequest request)
         {
             Employee employee = new Employee();
+            employee.UserName = request.UserName;
             employee.FirstName = request.FirstName;
             employee.LastName = request.LastName;
             employee.Email = request.Email;
@@ -32,6 +33,7 @@ namespace Business.Concretes
             await _employeeRepository.Add(employee);
 
             CreateEmployeeResponse response = new CreateEmployeeResponse();
+            response.UserName = employee.UserName;
             response.FirstName = employee.FirstName;
             response.LastName = employee.LastName;
             response.Email = employee.Email;

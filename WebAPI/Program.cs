@@ -15,6 +15,8 @@ namespace WebAPI
             builder.Services.AddControllers();
             builder.Services.AddDataAccessServices(builder.Configuration);
             builder.Services.AddBusinessServices();
+
+
             try
             {
                 var app = builder.Build();
@@ -22,11 +24,7 @@ namespace WebAPI
                 if (app.Environment.IsDevelopment())
                 {
                     app.UseSwagger();
-                    app.UseSwaggerUI(c =>
-                    {
-                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                        c.RoutePrefix = "swagger";
-                    });
+                    app.UseSwaggerUI();
                 }
 
                 app.UseAuthorization();

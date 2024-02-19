@@ -24,6 +24,7 @@ namespace Business.Concretes
         public async Task<CreateApplicantResponse> AddAsync(CreateApplicantRequest request)
         {
             Applicant aplicant = new Applicant();
+            aplicant.UserName = request.UserName;
             aplicant.FirstName = request.FirstName;
             aplicant.LastName = request.LastName;
             aplicant.Email = request.Email;
@@ -33,6 +34,7 @@ namespace Business.Concretes
             await _applicantRepository.Add(aplicant);
 
             CreateApplicantResponse response = new CreateApplicantResponse();
+            response.UserName = aplicant.UserName;
             response.FirstName = aplicant.FirstName;
             response.LastName = aplicant.LastName;
             response.Email = aplicant.Email;

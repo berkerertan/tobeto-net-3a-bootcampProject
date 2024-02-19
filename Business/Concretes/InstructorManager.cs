@@ -25,6 +25,7 @@ namespace Business.Concretes
         public async Task<CreateInstructorResponse> AddAsync(CreateInstructorRequest request)
         {
             Instructor instructor = new Instructor();
+            instructor.UserName = request.UserName;
             instructor.FirstName = request.FirstName;
             instructor.LastName = request.LastName;
             instructor.Email = request.Email;
@@ -34,6 +35,7 @@ namespace Business.Concretes
             await _instructorRepository.Add(instructor);
 
             CreateInstructorResponse response = new CreateInstructorResponse();
+            response.UserName = instructor.UserName;
             response.FirstName = instructor.FirstName;
             response.LastName = instructor.LastName;
             response.Email = instructor.Email;
