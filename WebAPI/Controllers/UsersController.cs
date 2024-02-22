@@ -10,58 +10,51 @@ namespace WebAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IUserService _userManager;
+
+        public UsersController(IUserService userManager)
         {
-            _userService = userService;
+            _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<CreateUserResponse> AddAsync(CreateUserRequest request)
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add(CreateUserRequest request)
         {
-            return await _userService.AddAsync(request);
+            var addedUser = await _userManager.AddAsync(request);
+            return Ok(addedUser);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> getAll()
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(DeleteUserRequest request)
         {
-            return Ok(await _userService.GetAllAsync());
+            var item = await _userManager.DeleteAsync(request);
+            return Ok(item);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetByIdAsync(int id)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(GetUserRequest request)
         {
-            var user = await _userService.GetByIdAsync(id);
-            if (user == null)
+            var user = await _userManager.GetByIdAsync(request);
+
+            return Ok(user);
+        }
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userManager.GetAllAsync();
+            return Ok(users);
+        }
+
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update(UpdateUserRequest request)
+        {
+            if (request.Id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            return user;
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest("");//400 Bad Request kodunu döndürür. Kullanıcı bulunamadı.
-            }
-
-            var updatedUser = await _userService.UpdateAsync(user);
-            if (updatedUser == null)
-            {
-                return NotFound("Kullanıcı bulunamadı");//404 Not Found kodunu döndürür. Kullanıcı bulunamadı.
-            }
-
-            return Ok("Başarıyla güncellendi");//200 OK kodunu döndürür. Kullanıcı başarıyla güncellendi.
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute]int id)
-        {
-            await _userService.DeleteAsync(id);
-
-            return Ok("Kullanıcı başarıyla silindi");
+            var updatedUser = await _userManager.UpdateAsync(request);
+            return Ok(updatedUser);
         }
     }
 }

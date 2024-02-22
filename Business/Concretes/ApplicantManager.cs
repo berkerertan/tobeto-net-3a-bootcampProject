@@ -1,7 +1,9 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
 using Business.Requests.Aplicants;
 using Business.Responses.Applicants;
 using Business.Responses.Users;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using DataAccess.Repositories;
 using Entities.Concretes;
@@ -17,63 +19,68 @@ namespace Business.Concretes
 
     {
         private readonly IApplicantRepository _applicantRepository;
-        public ApplicantManager(IApplicantRepository applicantRepository)
+        private readonly IMapper _mapper;
+
+        public ApplicantManager(IApplicantRepository applicantRepository, IMapper mapper)
         {
             _applicantRepository = applicantRepository;
-        }
-        public async Task<CreateApplicantResponse> AddAsync(CreateApplicantRequest request)
-        {
-            Applicant aplicant = new Applicant();
-            aplicant.UserName = request.UserName;
-            aplicant.FirstName = request.FirstName;
-            aplicant.LastName = request.LastName;
-            aplicant.Email = request.Email;
-            aplicant.NationalIdentity = request.NationalIdentity;
-            aplicant.Password = request.Password;
-            aplicant.About = request.About;
-            await _applicantRepository.AddAsync(aplicant);
-
-            CreateApplicantResponse response = new CreateApplicantResponse();
-            response.UserName = aplicant.UserName;
-            response.FirstName = aplicant.FirstName;
-            response.LastName = aplicant.LastName;
-            response.Email = aplicant.Email;
-            response.NationalIdentity = aplicant.NationalIdentity;
-            response.About = aplicant.About;
-            return response;
+            _mapper = mapper;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<IDataResult<CreateApplicantResponse>> AddAsync(CreateApplicantRequest request)
         {
-            var applicant = await _applicantRepository.GetAsync(a => a.Id == id);
-            if (applicant != null)
+            Applicant applicant = _mapper.Map<Applicant>(request);
+            await _applicantRepository.AddAsync(applicant);
+            CreateApplicantResponse response = _mapper.Map<CreateApplicantResponse>(applicant);
+
+            return new SuccessDataResult<CreateApplicantResponse>(response, "Added Succesfuly");
+        }
+
+        public async Task<IResult> DeleteAsync(DeleteApplicantRequest request)
+        {
+            var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
+            if (item != null)
             {
-                await _applicantRepository.DeleteAsync(applicant);
+                await _applicantRepository.DeleteAsync(item);
+                return new SuccessResult("Deleted Succesfuly");
             }
+            return new ErrorResult("Delete Failed!");
         }
 
-        public async Task<List<Applicant>> GetAllAsync()
+        public async Task<IDataResult<List<GetApplicantResponse>>> GetAllAsync()
         {
-            return await _applicantRepository.GetAllAsync();
+
+            var list = await _applicantRepository.GetAllAsync();
+            List<GetApplicantResponse> responselist = _mapper.Map<List<GetApplicantResponse>>(list);
+
+            return new SuccessDataResult<List<GetApplicantResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<Applicant> GetByIdAsync(int id)
+        public async Task<IDataResult<GetApplicantResponse>> GetByIdAsync(GetApplicantRequest request)
         {
-            return await _applicantRepository.GetAsync(a => a.Id == id);
-        }
-
-        public async Task<UpdateApplicantResponse> UpdateAsync(Applicant aplicant)
-        {
-            var updatedAplicant = await _applicantRepository.UpdateAsync(aplicant);
-            return new UpdateApplicantResponse
+            var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
+            if (item != null)
             {
-                UserName = updatedAplicant.UserName,
-                FirstName = updatedAplicant.FirstName,
-                LastName = updatedAplicant.LastName,
-                Email = updatedAplicant.Email,
-                NationalIdentity = updatedAplicant.NationalIdentity,
-                About = updatedAplicant.About
-            };
+                GetApplicantResponse response = _mapper.Map<GetApplicantResponse>(item);
+                return new SuccessDataResult<GetApplicantResponse>(response, "found Succesfuly.");
+            }
+            return new ErrorDataResult<GetApplicantResponse>("Applicant could not be found.");
+        }
+
+        public async Task<IDataResult<UpdateApplicantResponse>> UpdateAsync(UpdateApplicantRequest request)
+        {
+            var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
+
+            if (item != null)
+            {
+                _mapper.Map(request, item);
+                await _applicantRepository.UpdateAsync(item);
+                UpdateApplicantResponse response = _mapper.Map<UpdateApplicantResponse>(item);
+
+                return new SuccessDataResult<UpdateApplicantResponse>(response, "Applicant succesfully updated!");
+            }
+
+            return new ErrorDataResult<UpdateApplicantResponse>("Applicant could not be found.");
         }
     }
 }

@@ -26,5 +26,6 @@ namespace Entities.Concretes
         }
 
         public string About { get; set; }
+        public ICollection<Application> Applications { get; set; }
     }
 }

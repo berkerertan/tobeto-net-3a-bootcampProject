@@ -1,5 +1,6 @@
 ﻿using Business.Requests.Users;
 using Business.Responses.Users;
+using Core.Utilities.Results;
 using Entities.Concretes;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace Business.Abstracts
 {
     public interface IUserService
     {
-        Task<CreateUserResponse> AddAsync(CreateUserRequest request);
-        Task<List<User>> GetAllAsync();
-        Task<User> GetByIdAsync(int id);
-        Task<UpdateUserResponse> UpdateAsync(User user);
-        Task DeleteAsync(int id);
+        public Task<IDataResult<CreateUserResponse>> AddAsync(CreateUserRequest request);
+        public Task<IDataResult<UpdateUserResponse>> UpdateAsync(UpdateUserRequest request);
+        public Task<IResult> DeleteAsync(DeleteUserRequest request);
+        public Task<IDataResult<List<GetUserResponse>>> GetAllAsync();
+        public Task<IDataResult<GetUserResponse>> GetByIdAsync(GetUserRequest request);
     }
 }

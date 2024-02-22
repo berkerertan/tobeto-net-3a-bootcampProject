@@ -10,46 +10,46 @@ namespace WebAPI.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
-        public EmployeesController(IEmployeeService employeeService)
+        private readonly IEmployeeService _employeeManager;
+
+        public EmployeesController(IEmployeeService employeeManager)
         {
-            _employeeService = employeeService;
+            _employeeManager = employeeManager;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CreateEmployeeResponse>> AddAsync(CreateEmployeeRequest request)
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add(CreateEmployeeRequest request)
         {
-            var response = await _employeeService.AddAsync(request);
-            return Ok(response);
+            var addedEmployee = await _employeeManager.AddAsync(request);
+            return Ok(addedEmployee);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Employee>>> GetAll()
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(DeleteEmployeeRequest request)
         {
-            var employees = await _employeeService.GetAllAsync();
-            return Ok(employees);
+
+
+            return Ok(await _employeeManager.DeleteAsync(request));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, Employee employee)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(GetEmployeeRequest request)
         {
-            if (id != employee.Id)
-            {
-                return BadRequest("Geçersiz çalışan kimliği");
-            }
-            var updatedEmployee = await _employeeService.UpdateAsync(employee);
-            if (updatedEmployee == null)
-            {
-                return NotFound("Çalışan bulunamadı");
-            }
-            return Ok("Çalışan başarıyla güncellendi");
+            var user = await _employeeManager.GetByIdAsync(request);
+            return Ok(user);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
-            await _employeeService.DeleteAsync(id);
-            return Ok("Çalışan başarıyla silindi");
+            var users = await _employeeManager.GetAllAsync();
+            return Ok(users);
+        }
+
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update(UpdateEmployeeRequest request)
+        {
+            return Ok(await _employeeManager.UpdateAsync(request));
         }
     }
 }

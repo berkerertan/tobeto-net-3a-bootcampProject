@@ -14,9 +14,9 @@ namespace Entities.Concretes
             
         }
 
-        public User(string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
+        public User(int id,string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
         {
- 
+            Id = id;
             UserName = userName;
             FirstName = firstName;
             LastName = lastName;
@@ -25,7 +25,7 @@ namespace Entities.Concretes
             Email = email;
             Password = password;
         }
-
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

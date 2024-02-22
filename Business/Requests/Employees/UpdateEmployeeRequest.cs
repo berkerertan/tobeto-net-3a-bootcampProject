@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Business.Requests.Users
 {
-    public class UpdateGetEmployeeRequest
+    public class UpdateEmployeeRequest
     {
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

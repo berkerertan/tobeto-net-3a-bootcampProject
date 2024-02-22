@@ -1,6 +1,8 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
 using Business.Requests.Users;
 using Business.Responses.Users;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
 using System;
@@ -14,62 +16,68 @@ namespace Business.Concretes
     public class UserManager : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserManager(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+
+        public UserManager(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
-        public async Task<CreateUserResponse> AddAsync(CreateUserRequest request)
+
+        public async Task<IDataResult<CreateUserResponse>> AddAsync(CreateUserRequest request)
         {
-            User user = new User();
-            user.UserName = request.UserName;
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
-            user.Email = request.Email;
-            user.NationalIdentity = request.NationalIdentity;
-            user.Password = request.Password;
+            User user = _mapper.Map<User>(request);
             await _userRepository.AddAsync(user);
+            CreateUserResponse response = _mapper.Map<CreateUserResponse>(user);
 
-            CreateUserResponse response = new CreateUserResponse();
-            response.UserName = user.UserName;
-            response.FirstName = user.FirstName;
-            response.LastName = user.LastName;
-            response.Email = user.Email;
-            response.NationalIdentity = user.NationalIdentity;
-            return response;
-
+            return new SuccessDataResult<CreateUserResponse>(response, "Added Succesfuly");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<IResult> DeleteAsync(DeleteUserRequest request)
         {
-            var user = await _userRepository.GetAsync(u=>u.Id == id);
-            if (user != null)
+            var item = await _userRepository.GetAsync(p => p.Id == request.Id);
+            if (item != null)
             {
-                await _userRepository.DeleteAsync(user);
+                await _userRepository.DeleteAsync(item);
+                return new SuccessResult("Deleted Succesfuly");
             }
+            return new ErrorResult("Delete Failed!");
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<IDataResult<List<GetUserResponse>>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+
+            var list = await _userRepository.GetAllAsync();
+            List<GetUserResponse> responselist = _mapper.Map<List<GetUserResponse>>(list);
+
+            return new SuccessDataResult<List<GetUserResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<IDataResult<GetUserResponse>> GetByIdAsync(GetUserRequest request)
         {
-           return await _userRepository.GetAsync(u=> u.Id == id);
-        }
-
-        public async Task<UpdateUserResponse> UpdateAsync(User user)
-        {
-            var UpdatedUser = await _userRepository.UpdateAsync(user);
-            return new UpdateUserResponse
+            var item = await _userRepository.GetAsync(p => p.Id == request.Id);
+            if (item != null)
             {
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                NationalIdentity = user.NationalIdentity,
-                Password = user.Password,
-            };
+                GetUserResponse response = _mapper.Map<GetUserResponse>(item);
+                return new SuccessDataResult<GetUserResponse>(response, "found Succesfuly.");
+            }
+            return new ErrorDataResult<GetUserResponse>("User could not be found.");
+        }
+
+        public async Task<IDataResult<UpdateUserResponse>> UpdateAsync(UpdateUserRequest request)
+        {
+            var item = await _userRepository.GetAsync(p => p.Id == request.Id);
+
+            if (item != null)
+            {
+                _mapper.Map(request, item);
+                await _userRepository.UpdateAsync(item);
+                UpdateUserResponse response = _mapper.Map<UpdateUserResponse>(item);
+
+                return new SuccessDataResult<UpdateUserResponse>(response, "User succesfully updated!");
+            }
+
+            return new ErrorDataResult<UpdateUserResponse>("User could not be found.");
         }
     }
 }

@@ -10,61 +10,43 @@ namespace WebAPI.Controllers
     [ApiController]
     public class InstructorsController : ControllerBase
     {
-        private readonly IInstructorService _instructorService;
+        private readonly IInstructorService _instructorManager;
 
-        public InstructorsController(IInstructorService instructorService)
+        public InstructorsController(IInstructorService instructorManager)
         {
-            _instructorService = instructorService;
+            _instructorManager = instructorManager;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CreateInstructorResponse>> AddAsync(CreateInstructorRequest request)
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add(CreateInstructorRequest request)
         {
-            var response = await _instructorService.AddAsync(request);
-            return Ok(response);
+            await _instructorManager.AddAsync(request);
+            return Ok();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Instructor>>> GetAll()
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(DeleteInstructorRequest request)
         {
-            var instructors = await _instructorService.GetAllAsync();
-            return Ok(instructors);
+            return Ok(await _instructorManager.DeleteAsync(request));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Instructor>> GetByIdAsync(int id)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(GetInstructorRequest request)
         {
-            var instructor = await _instructorService.GetByIdAsync(id);
-            if (instructor == null)
-            {
-                return NotFound();
-            }
-            return Ok(instructor);
+            return Ok(await _instructorManager.GetByIdAsync(request));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, Instructor instructor)
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
-            if (id != instructor.Id)
-            {
-                return BadRequest("Geçersiz eğitmen kimliği");
-            }
-
-            var updatedInstructor = await _instructorService.UpdateAsync(instructor);
-            if (updatedInstructor == null)
-            {
-                return NotFound("Eğitmen bulunamadı");
-            }
-
-            return Ok("Eğitmen başarıyla güncellendi");
+            var users = await _instructorManager.GetAll();
+            return Ok(users);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update(UpdateInstructorRequest request)
         {
-            await _instructorService.DeleteAsync(id);
-
-            return Ok("Eğitmen başarıyla silindi");
+            return Ok(await _instructorManager.UpdateAsync(request));
         }
     }
 }

@@ -28,5 +28,6 @@ namespace Entities.Concretes
         }
 
         public string CompanyName { get; set; }
+        public ICollection<Bootcamp> Bootcamps { get; set; }
     }
 }

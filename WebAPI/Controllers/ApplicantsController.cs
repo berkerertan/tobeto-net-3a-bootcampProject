@@ -10,61 +10,43 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ApplicantsController : ControllerBase
     {
-        private readonly IApplicantService _applicantService;
+        private readonly IApplicantService _applicantManager;
 
-        public ApplicantsController(IApplicantService applicantService)
+        public ApplicantsController(IApplicantService applicantManager)
         {
-            _applicantService = applicantService;
+            _applicantManager = applicantManager;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CreateApplicantResponse>> AddAsync(CreateApplicantRequest request)
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add(CreateApplicantRequest request)
         {
-            var response = await _applicantService.AddAsync(request);
-            return Ok(response);
+            return Ok(await _applicantManager.AddAsync(request));
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Applicant>>> GetAll()
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(DeleteApplicantRequest request)
         {
-            var applicants = await _applicantService.GetAllAsync();
-            return Ok(applicants);
+            return Ok(await _applicantManager.DeleteAsync(request));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Applicant>> GetByIdAsync(int id)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(GetApplicantRequest request)
         {
-            var applicant = await _applicantService.GetByIdAsync(id);
-            if (applicant == null)
-            {
-                return NotFound();
-            }
-            return Ok(applicant);
+            var user = await _applicantManager.GetByIdAsync(request);
+            return Ok(user);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, Applicant applicant)
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
-            if (id != applicant.Id)
-            {
-                return BadRequest("Geçersiz başvuru kimliği");
-            }
-
-            var updatedApplicant = await _applicantService.UpdateAsync(applicant);
-            if (updatedApplicant == null)
-            {
-                return NotFound("Başvuru bulunamadı");
-            }
-
-            return Ok("Başvuru başarıyla güncellendi");
+            var users = await _applicantManager.GetAllAsync();
+            return Ok(users);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update(UpdateApplicantRequest request)
         {
-            await _applicantService.DeleteAsync(id);
-
-            return Ok("Başvuru başarıyla silindi");
+            return Ok(await _applicantManager.UpdateAsync(request));
         }
     }
 }

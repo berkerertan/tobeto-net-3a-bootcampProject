@@ -15,7 +15,10 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
         {
 
             builder.Property(x => x.About).HasColumnName("About").IsRequired();
-            
+
+            builder.HasMany(x => x.Applications);
+
+
         }
     }
 }

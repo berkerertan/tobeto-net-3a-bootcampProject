@@ -1,7 +1,9 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
 using Business.Requests.Instructors;
 using Business.Responses.Instructors;
 using Business.Responses.Users;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using DataAccess.Repositories;
 using Entities.Concretes;
@@ -17,66 +19,68 @@ namespace Business.Concretes
 {
     public class InstructorManager : IInstructorService
     {
-        private readonly IInstructorRepository _instructorRepository;
-        public InstructorManager(IInstructorRepository instructorRepository)
-        {
-            _instructorRepository = instructorRepository;
-        }
-        public async Task<CreateInstructorResponse> AddAsync(CreateInstructorRequest request)
-        {
-            Instructor instructor = new Instructor();
-            instructor.UserName = request.UserName;
-            instructor.FirstName = request.FirstName;
-            instructor.LastName = request.LastName;
-            instructor.Email = request.Email;
-            instructor.NationalIdentity = request.NationalIdentity;
-            instructor.Password = request.Password;
-            instructor.CompanyName = request.CompanyName;
-            await _instructorRepository.AddAsync(instructor);
+        private readonly IInstructorRepository _ınstructorRepository;
+        private readonly IMapper _mapper;
 
-            CreateInstructorResponse response = new CreateInstructorResponse();
-            response.UserName = instructor.UserName;
-            response.FirstName = instructor.FirstName;
-            response.LastName = instructor.LastName;
-            response.Email = instructor.Email;
-            response.NationalIdentity = instructor.NationalIdentity;
-            response.CompanyName = instructor.CompanyName;
-            return response;
+        public InstructorManager(IInstructorRepository ınstructorRepository, IMapper mapper)
+        {
+            _ınstructorRepository = ınstructorRepository;
+            _mapper = mapper;
         }
 
-
-        public async Task DeleteAsync(int id)
+        public async Task<IDataResult<CreateInstructorResponse>> AddAsync(CreateInstructorRequest request)
         {
-            var instructor = await _instructorRepository.GetAsync(i => i.Id == id);
-            if (instructor != null)
+            Instructor user = _mapper.Map<Instructor>(request);
+            await _ınstructorRepository.AddAsync(user);
+            CreateInstructorResponse response = _mapper.Map<CreateInstructorResponse>(user);
+
+            return new SuccessDataResult<CreateInstructorResponse>(response, "Added Succesfuly");
+        }
+
+        public async Task<IResult> DeleteAsync(DeleteInstructorRequest request)
+        {
+            var item = await _ınstructorRepository.GetAsync(p => p.Id == request.Id);
+            if (item != null)
             {
-                await _instructorRepository.DeleteAsync(instructor);
+                await _ınstructorRepository.DeleteAsync(item);
+                return new SuccessResult("Deleted Succesfuly");
             }
+            return new ErrorResult("Delete Failed!");
         }
 
-        public async Task<List<Instructor>> GetAllAsync()
+        public async Task<IDataResult<List<GetInstructorResponse>>> GetAll()
         {
-            return await _instructorRepository.GetAllAsync();
+            var list = await _ınstructorRepository.GetAllAsync();
+            List<GetInstructorResponse> responselist = _mapper.Map<List<GetInstructorResponse>>(list);
+
+            return new SuccessDataResult<List<GetInstructorResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<Instructor> GetByIdAsync(int id)
+        public async Task<IDataResult<GetInstructorResponse>> GetByIdAsync(GetInstructorRequest request)
         {
-            return await _instructorRepository.GetAsync(i=>i.Id == id);
-        }
-
-        public async Task<UpdateInstructorResponse> UpdateAsync(Instructor instructor)
-        {
-            var updatedInstructor = await _instructorRepository.UpdateAsync(instructor);
-
-            return new UpdateInstructorResponse
+            var item = await _ınstructorRepository.GetAsync(p => p.Id == request.Id);
+            if (item != null)
             {
-                UserName = instructor.UserName,
-                FirstName = instructor.FirstName,
-                LastName = instructor.LastName,
-                Email = instructor.Email,
-                NationalIdentity = instructor.NationalIdentity,
-                CompanyName = instructor.CompanyName,
-            };
+                GetInstructorResponse response = _mapper.Map<GetInstructorResponse>(item);
+                return new SuccessDataResult<GetInstructorResponse>(response, "found Succesfuly.");
+            }
+            return new ErrorDataResult<GetInstructorResponse>("User could not be found.");
+        }
+
+        public async Task<IDataResult<UpdateInstructorResponse>> UpdateAsync(UpdateInstructorRequest request)
+        {
+            var item = await _ınstructorRepository.GetAsync(p => p.Id == request.Id);
+
+            if (item != null)
+            {
+                _mapper.Map(request, item);
+                await _ınstructorRepository.UpdateAsync(item);
+                UpdateInstructorResponse response = _mapper.Map<UpdateInstructorResponse>(item);
+
+                return new SuccessDataResult<UpdateInstructorResponse>(response, "User succesfully updated!");
+            }
+
+            return new ErrorDataResult<UpdateInstructorResponse>("User could not be found.");
         }
     }
 }
