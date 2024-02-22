@@ -13,6 +13,7 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Instructor> builder)
         {
+            builder.ToTable("Instructor");
             builder.Property(x => x.CompanyName).HasColumnName("CompanyName");
 
             builder.HasMany(x => x.Bootcamps);

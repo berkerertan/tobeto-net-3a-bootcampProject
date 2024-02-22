@@ -38,7 +38,7 @@ namespace WebAPI
             catch (Exception ex)
             {
                 Console.WriteLine("Hata oluþtu: " + ex.Message);
-                throw; // Hatanýn daha detaylý incelenmesi için istisnayý yeniden fýrlatýn
+                throw; // Hatanýn daha detaylý incelenmesi için
             }
 
             

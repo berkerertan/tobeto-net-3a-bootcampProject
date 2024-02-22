@@ -13,7 +13,7 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Applicant> builder)
         {
-
+            builder.ToTable("Applicant");
             builder.Property(x => x.About).HasColumnName("About").IsRequired();
 
             builder.HasMany(x => x.Applications);

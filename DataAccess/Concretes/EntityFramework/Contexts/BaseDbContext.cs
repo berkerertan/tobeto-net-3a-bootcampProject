@@ -23,10 +23,6 @@ namespace DataAccess.Concretes.EntityFramework.Contexts
         public DbSet<Bootcamp> Bootcamps { get; set; }
         public DbSet<BootcampState> BootcampStates { get; set; }
 
-        public BaseDbContext()
-        {
-            
-        }
         public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(dbContextOptions)
         {
             Configuration = configuration;
@@ -34,20 +30,10 @@ namespace DataAccess.Concretes.EntityFramework.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            // (entity configurations) uygular. Bu yapılandırmalar, veritabanındaki varlıkların nasıl oluşturulacağını belirtir.
-            // Özellikle, varlık türleri arasındaki ilişkileri, anahtarları ve diğer özellikleri tanımlar.
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
-                //Restrict = DeleteBehavior.Restrict ilişkili bir varlık silinmeye çalışıldığında silme işlemini engellerken,
-                //DeleteBehavior.Cascade ilişkili bir varlık silindiğinde, bu varlıkla ilişkilendirilmiş
-                //olan diğer varlıkların da otomatik olarak silinmesini sağlar.
-
-                //NoAction ise müdahale etmez.
-
-                // CASCADE Bu, bir varlık silindiğinde ilişkili varlıkların da silineceği anlamına gelir.
-                // Yani, ilişkili varlık silindiğinde, diğer varlık otomatik olarak silinir, bu da ilişkili verilerin tutarlılığını sağlar.
 
             }
         }

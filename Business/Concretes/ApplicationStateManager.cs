@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration;
 using Business.Abstracts;
 using Business.Requests.ApplicationStates;
 using Business.Responses.ApplicationStates;
