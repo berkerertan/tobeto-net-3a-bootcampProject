@@ -67,7 +67,7 @@ namespace Business.Concretes
         public async Task<IDataResult<UpdateApplicationResponse>> UpdateAsync(UpdateApplicationRequest request)
         {
             var item = await _applicationRepository.GetAsync(p => p.Id == request.Id, include: x => x.Include(p => p.Applicant).Include(p => p.Bootcamp));
-            if (request.Id == 0 || item == null)
+            if (request.Id == null || item == null)
             {
                 return new ErrorDataResult<UpdateApplicationResponse>("Application could not be found.");
             }

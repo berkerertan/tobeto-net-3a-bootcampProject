@@ -65,7 +65,7 @@ public class BootcampStateManager : IBootcampStateService
     public async Task<IDataResult<UpdateBootcampStateResponse>> UpdateAsync(UpdateBootcampStateRequest request)
     {
         var item = await _bootcampStateRepository.GetAsync(p => p.Id == request.Id);
-        if (request.Id == 0 || item == null)
+        if (request.Id == null || item == null)
         {
             return new ErrorDataResult<UpdateBootcampStateResponse>("BootcampState could not be found.");
         }

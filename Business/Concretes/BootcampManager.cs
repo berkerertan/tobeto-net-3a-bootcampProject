@@ -68,7 +68,7 @@ namespace Business.Concretes
         public async Task<IDataResult<UpdateBootcampResponse>> UpdateAsync(UpdateBootcampRequest request)
         {
             var item = await _bootcampRepository.GetAsync(p => p.Id == request.Id);
-            if (request.Id == 0 || item == null)
+            if (request.Id == null || item == null)
             {
                 return new ErrorDataResult<UpdateBootcampResponse>("Bootcamp could not be found.");
             }
