@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class BootcampStateRepository : EfRepositoryBase<BootcampState, int, BaseDbContext>, IBootcampStateRepository
+    public class BootcampStateRepository : EfRepositoryBase<BootcampState, Guid, BaseDbContext>, IBootcampStateRepository
     {
         public BootcampStateRepository(BaseDbContext context) : base(context)
         {

@@ -2,9 +2,9 @@
 {
     public class UpdateApplicationRequest
     {
-        public int Id { get; set; }
-        public int ApplicantId { get; set; }
-        public int BootcampId { get; set; }
-        public int ApplicationStateId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ApplicantId { get; set; }
+        public Guid BootcampId { get; set; }
+        public Guid ApplicationStateId { get; set; }
     }
 }

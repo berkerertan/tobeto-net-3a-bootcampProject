@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concretes
 {
-    public class BootcampState : BaseEntity<int>
+    public class BootcampState : BaseEntity<Guid>
     {
         public string Name { get; set; }
     }

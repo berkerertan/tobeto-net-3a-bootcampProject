@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstracts
 {
-    public interface IInstructorRepository : IAsyncRepository<Instructor,int>
+    public interface IInstructorRepository : IAsyncRepository<Instructor, Guid>
     {
     }
 }

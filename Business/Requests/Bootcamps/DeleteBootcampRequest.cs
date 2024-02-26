@@ -2,6 +2,6 @@
 {
     public class DeleteBootcampRequest
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

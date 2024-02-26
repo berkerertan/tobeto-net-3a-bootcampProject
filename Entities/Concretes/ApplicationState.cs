@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concretes
 {
-    public class ApplicationState : BaseEntity<int>
+    public class ApplicationState : BaseEntity<Guid>
     {
         public string Name { get; set; }
     }

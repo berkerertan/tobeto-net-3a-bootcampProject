@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class ApplicationRepository : EfRepositoryBase<Application, int, BaseDbContext>, IApplicationRepository
+    public class ApplicationRepository : EfRepositoryBase<Application, Guid, BaseDbContext>, IApplicationRepository
     {
         public ApplicationRepository(BaseDbContext context) : base(context)
         {

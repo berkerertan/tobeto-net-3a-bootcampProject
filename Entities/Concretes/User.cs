@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Entities.Concretes
 {
-    public class User : BaseEntity<int>
+    public class User : BaseEntity<Guid>
     {
         public User()
         {
-            
+            UserImages = new HashSet<UserImage>();
         }
 
-        public User(int id,string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
+        public User(Guid id,string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password)
         {
             Id = id;
             UserName = userName;
@@ -25,7 +25,7 @@ namespace Entities.Concretes
             Email = email;
             Password = password;
         }
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -33,5 +33,6 @@ namespace Entities.Concretes
         public string NationalIdentity { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public virtual ICollection<UserImage> UserImages { get; set; }
     }
 }

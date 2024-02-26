@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstracts
 {
-    public interface IBootcampStateRepository : IAsyncRepository<BootcampState, int>
+    public interface IBootcampStateRepository : IAsyncRepository<BootcampState, Guid>
     {
     }
 }

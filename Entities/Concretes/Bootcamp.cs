@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities.Concretes
 {
-    public class Bootcamp : BaseEntity<int>
+    public class Bootcamp : BaseEntity<Guid>
     {
         public string Name { get; set; }
-        public int InstructorId { get; set; }
-        public int BootcampStateId { get; set; }
+        public Guid InstructorId { get; set; }
+        public Guid BootcampStateId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public BootcampState BootcampState { get; set; }

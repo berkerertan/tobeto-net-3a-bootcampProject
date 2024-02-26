@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstracts
 {
-    public interface IApplicationRepository : IAsyncRepository<Application, int>
+    public interface IApplicationRepository : IAsyncRepository<Application, Guid>
     {
 
     }

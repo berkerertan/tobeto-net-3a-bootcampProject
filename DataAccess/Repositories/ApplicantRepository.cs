@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class ApplicantRepository : EfRepositoryBase<Applicant, int, BaseDbContext>, IApplicantRepository
+    public class ApplicantRepository : EfRepositoryBase<Applicant, Guid, BaseDbContext>, IApplicantRepository
     {
         public ApplicantRepository(BaseDbContext context) : base(context)
         {

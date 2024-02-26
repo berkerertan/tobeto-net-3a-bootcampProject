@@ -23,6 +23,8 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
             builder.Property(x => x.Email).HasColumnName("Email");
             builder.Property(x => x.Password).HasColumnName("Password");
 
+            builder.HasMany(x => x.UserImages);
+
         }
     }
 }
