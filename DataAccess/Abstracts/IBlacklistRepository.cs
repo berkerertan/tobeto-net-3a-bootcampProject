@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstracts
 {
-    public interface IApplicantRepository : IAsyncRepository<Applicant, Guid>
+    public interface IBlacklistRepository :IAsyncRepository<Blacklist, Guid>
     {
+
     }
 }

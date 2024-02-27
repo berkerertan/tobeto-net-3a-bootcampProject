@@ -8,7 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly IUserService _userManager;
 
@@ -42,8 +42,7 @@ namespace WebAPI.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userManager.GetAllAsync();
-            return Ok(users);
+            return HandleDataResult(await _userManager.GetAllAsync());
         }
 
         [HttpPut("Update")]

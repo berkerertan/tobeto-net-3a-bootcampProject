@@ -24,23 +24,21 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Application", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicantId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ApplicantId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ApplicantId");
 
-                    b.Property<int>("ApplicationStateId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ApplicationStateId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ApplicationStateId");
 
-                    b.Property<int>("BootcampId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("BootcampId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("BootcampId");
 
                     b.Property<DateTime>("CreatedDate")
@@ -65,12 +63,10 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.ApplicationState", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -93,15 +89,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Bootcamp", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BootcampStateId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("BootcampStateId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("BootcampStateId");
 
                     b.Property<DateTime>("CreatedDate")
@@ -114,8 +108,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("EndDate");
 
-                    b.Property<int>("InstructorId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("InstructorId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("InstructorId");
 
                     b.Property<string>("Name")
@@ -141,12 +135,10 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.BootcampState", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -169,12 +161,10 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -224,6 +214,35 @@ namespace DataAccess.Migrations
                     b.ToTable("Users", (string)null);
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Entities.Concretes.UserImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserImages");
                 });
 
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>
@@ -308,6 +327,17 @@ namespace DataAccess.Migrations
                     b.Navigation("Instructor");
                 });
 
+            modelBuilder.Entity("Entities.Concretes.UserImage", b =>
+                {
+                    b.HasOne("Entities.Concretes.User", "User")
+                        .WithMany("UserImages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>
                 {
                     b.HasOne("Entities.Concretes.User", null)
@@ -338,6 +368,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concretes.Bootcamp", b =>
                 {
                     b.Navigation("Applications");
+                });
+
+            modelBuilder.Entity("Entities.Concretes.User", b =>
+                {
+                    b.Navigation("UserImages");
                 });
 
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>

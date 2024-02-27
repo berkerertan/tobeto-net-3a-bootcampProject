@@ -1,6 +1,8 @@
 using DataAccess;
 using Business;
 using Business.Abstracts;
+using Core.Exceptions.Extensions;
+
 namespace WebAPI
 {
     public class Program
@@ -17,14 +19,13 @@ namespace WebAPI
             builder.Services.AddBusinessServices();
 
 
-            try
-            {
                 var app = builder.Build();
                 // Configure the HTTP request pipeline.
                 if (app.Environment.IsDevelopment())
                 {
                     app.UseSwagger();
                     app.UseSwaggerUI();
+                    app.ConfigureCustomExceptionMiddleware();
                 }
 
                 app.UseAuthorization();
@@ -33,13 +34,6 @@ namespace WebAPI
                 app.MapControllers();
 
                 app.Run();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Hata oluþtu: " + ex.Message);
-                throw; // Hatanýn daha detaylý incelenmesi için
-            }
 
             
         }

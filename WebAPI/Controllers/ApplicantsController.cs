@@ -10,43 +10,43 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ApplicantsController : ControllerBase
     {
-        private readonly IApplicantService _applicantManager;
+        private readonly IApplicantService _applicantService;
 
         public ApplicantsController(IApplicantService applicantManager)
         {
-            _applicantManager = applicantManager;
+            _applicantService = applicantManager;
         }
 
         [HttpPost("Add")]
         public async Task<IActionResult> Add(CreateApplicantRequest request)
         {
-            return Ok(await _applicantManager.AddAsync(request));
+            return Ok(await _applicantService.AddAsync(request));
         }
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(DeleteApplicantRequest request)
         {
-            return Ok(await _applicantManager.DeleteAsync(request));
+            return Ok(await _applicantService.DeleteAsync(request));
         }
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(GetApplicantRequest request)
         {
-            var user = await _applicantManager.GetByIdAsync(request);
+            var user = await _applicantService.GetByIdAsync(request);
             return Ok(user);
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _applicantManager.GetAllAsync();
+            var users = await _applicantService.GetAllAsync();
             return Ok(users);
         }
 
         [HttpPut("Update")]
         public async Task<IActionResult> Update(UpdateApplicantRequest request)
         {
-            return Ok(await _applicantManager.UpdateAsync(request));
+            return Ok(await _applicantService.UpdateAsync(request));
         }
     }
 }
