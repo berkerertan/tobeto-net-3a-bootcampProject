@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20240227111408_mig21")]
-    partial class mig21
+    [Migration("20240227154849_mig123")]
+    partial class mig123
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,43 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationStates", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.Concretes.Blacklist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<Guid>("ApplicantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("AplicantId");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
+
+                    b.Property<DateTime>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reason");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId")
+                        .IsUnique();
+
+                    b.ToTable("Blacklists", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concretes.Bootcamp", b =>
@@ -257,7 +294,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("About");
 
-                    b.ToTable("Applicant", (string)null);
+                    b.ToTable("Applicants", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concretes.Employee", b =>
@@ -269,7 +306,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Position");
 
-                    b.ToTable("Employee", (string)null);
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concretes.Instructor", b =>
@@ -281,7 +318,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CompanyName");
 
-                    b.ToTable("Instructor", (string)null);
+                    b.ToTable("Instructors", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concretes.Application", b =>
@@ -309,6 +346,17 @@ namespace DataAccess.Migrations
                     b.Navigation("ApplicationState");
 
                     b.Navigation("Bootcamp");
+                });
+
+            modelBuilder.Entity("Entities.Concretes.Blacklist", b =>
+                {
+                    b.HasOne("Entities.Concretes.Applicant", "Applicant")
+                        .WithOne("Blacklist")
+                        .HasForeignKey("Entities.Concretes.Blacklist", "ApplicantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
                 });
 
             modelBuilder.Entity("Entities.Concretes.Bootcamp", b =>
@@ -381,6 +429,9 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>
                 {
                     b.Navigation("Applications");
+
+                    b.Navigation("Blacklist")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Concretes.Instructor", b =>

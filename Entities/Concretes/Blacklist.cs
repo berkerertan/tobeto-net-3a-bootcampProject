@@ -11,7 +11,7 @@ namespace Entities.Concretes
     {
         public string Reason { get; set; }
         public DateTime Date { get; set; }
-        public Guid AplicantId { get; set; }
+        public Guid ApplicantId { get; set; }
         public Applicant Applicant { get; set; }
     }
 }

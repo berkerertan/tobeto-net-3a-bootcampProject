@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class mig21 : Migration
+    public partial class mig123 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,7 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Applicant",
+                name: "Applicants",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -71,9 +71,9 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Applicant", x => x.Id);
+                    table.PrimaryKey("PK_Applicants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Applicant_Users_Id",
+                        name: "FK_Applicants_Users_Id",
                         column: x => x.Id,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -81,7 +81,7 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employee",
+                name: "Employees",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -89,9 +89,9 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employee", x => x.Id);
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employee_Users_Id",
+                        name: "FK_Employees_Users_Id",
                         column: x => x.Id,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -99,7 +99,7 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Instructor",
+                name: "Instructors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -107,9 +107,9 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Instructor", x => x.Id);
+                    table.PrimaryKey("PK_Instructors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Instructor_Users_Id",
+                        name: "FK_Instructors_Users_Id",
                         column: x => x.Id,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -139,6 +139,29 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Blacklists",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AplicantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Blacklists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Blacklists_Applicants_AplicantId",
+                        column: x => x.AplicantId,
+                        principalTable: "Applicants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bootcamps",
                 columns: table => new
                 {
@@ -162,9 +185,9 @@ namespace DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Bootcamps_Instructor_InstructorId",
+                        name: "FK_Bootcamps_Instructors_InstructorId",
                         column: x => x.InstructorId,
-                        principalTable: "Instructor",
+                        principalTable: "Instructors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -185,9 +208,9 @@ namespace DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Aplications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Aplications_Applicant_ApplicantId",
+                        name: "FK_Aplications_Applicants_ApplicantId",
                         column: x => x.ApplicantId,
-                        principalTable: "Applicant",
+                        principalTable: "Applicants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -220,6 +243,12 @@ namespace DataAccess.Migrations
                 column: "BootcampId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Blacklists_AplicantId",
+                table: "Blacklists",
+                column: "AplicantId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bootcamps_BootcampStateId",
                 table: "Bootcamps",
                 column: "BootcampStateId");
@@ -242,13 +271,13 @@ namespace DataAccess.Migrations
                 name: "Aplications");
 
             migrationBuilder.DropTable(
-                name: "Employee");
+                name: "Blacklists");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "UserImages");
-
-            migrationBuilder.DropTable(
-                name: "Applicant");
 
             migrationBuilder.DropTable(
                 name: "ApplicationStates");
@@ -257,10 +286,13 @@ namespace DataAccess.Migrations
                 name: "Bootcamps");
 
             migrationBuilder.DropTable(
+                name: "Applicants");
+
+            migrationBuilder.DropTable(
                 name: "BootcampStates");
 
             migrationBuilder.DropTable(
-                name: "Instructor");
+                name: "Instructors");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -17,9 +17,6 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
             builder.Property(x=>x.Id).HasColumnName("Id");
             builder.Property(x=>x.UserId).HasColumnName("UserId").IsRequired();
             builder.Property(x=>x.ImagePath).HasColumnName("ImagePath").IsRequired();
-            builder.Property(x=>x.CreatedDate).HasColumnName("CreatedDate");
-            builder.Property(x=>x.UpdatedDate).HasColumnName("UpdateDate");
-            builder.Property(x=>x.DeletedDate).HasColumnName("DeletedDate");
 
             builder.HasOne(x => x.User);
         }
