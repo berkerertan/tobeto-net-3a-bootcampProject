@@ -18,15 +18,21 @@ namespace Business.Concretes
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly IMapper _mapper;
+        private readonly IBlacklistService _blacklistService;
 
-        public ApplicationManager(IApplicationRepository applicationRepository, IMapper mapper)
+        public ApplicationManager(IApplicationRepository applicationRepository, IMapper mapper, IBlacklistService blacklistService)
         {
             _applicationRepository = applicationRepository;
             _mapper = mapper;
+            _blacklistService = blacklistService;   
         }
 
         public async Task<IDataResult<CreateApplicationResponse>> AddAsync(CreateApplicationRequest request)
         {
+            if (await _blacklistService.GetByApplicantIdAsync(request.ApplicantId) != null)
+            {
+                return new ErrorDataResult<CreateApplicationResponse>("Applicant is blacklisted");
+            }
             Application application = _mapper.Map<Application>(request);
             await _applicationRepository.AddAsync(application);
             return new SuccessDataResult<CreateApplicationResponse>("Added Succesfuly");

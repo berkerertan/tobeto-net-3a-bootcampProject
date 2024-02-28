@@ -16,7 +16,7 @@ namespace Business.Abstracts
     {
         public Task<IDataResult<CreateApplicantResponse>> AddAsync(CreateApplicantRequest request);
         public Task<IDataResult<List<GetApplicantResponse>>> GetAllAsync();
-        public Task<IDataResult<GetApplicantResponse>> GetByIdAsync(GetApplicantRequest request);
+        public Task<IDataResult<GetApplicantResponse>> GetByIdAsync(Guid id);
         public Task<IDataResult<UpdateApplicantResponse>> UpdateAsync(UpdateApplicantRequest request);
         public Task<IResult> DeleteAsync(DeleteApplicantRequest request);
     }

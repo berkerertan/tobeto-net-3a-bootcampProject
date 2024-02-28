@@ -3,6 +3,7 @@ using Business.Abstracts;
 using Business.Requests.Instructors;
 using Business.Responses.Instructors;
 using Business.Responses.Users;
+using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using DataAccess.Repositories;
@@ -30,6 +31,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<CreateInstructorResponse>> AddAsync(CreateInstructorRequest request)
         {
+            await CheckIfUserNameNotExist(request.UserName);
             Instructor user = _mapper.Map<Instructor>(request);
             await _ınstructorRepository.AddAsync(user);
             CreateInstructorResponse response = _mapper.Map<CreateInstructorResponse>(user);
@@ -81,6 +83,12 @@ namespace Business.Concretes
             }
 
             return new ErrorDataResult<UpdateInstructorResponse>("User could not be found.");
+        }
+
+        private async Task CheckIfUserNameNotExist(string userName)
+        {
+            var isExist = await _ınstructorRepository.GetAsync(user => user.UserName == userName);
+            if (isExist is not null) throw new BusinessException("Username name already exist");
         }
     }
 }

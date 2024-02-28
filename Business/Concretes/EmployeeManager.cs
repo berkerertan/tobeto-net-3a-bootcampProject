@@ -3,6 +3,7 @@ using Azure;
 using Business.Abstracts;
 using Business.Requests.Users;
 using Business.Responses.Users;
+using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using DataAccess.Repositories;
@@ -28,6 +29,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<CreateEmployeeResponse>> AddAsync(CreateEmployeeRequest request)
         {
+            await CheckIfUserNameNotExist(request.UserName);
             Employee employee = _mapper.Map<Employee>(request);
             await _employeeRepository.AddAsync(employee);
             CreateEmployeeResponse response = _mapper.Map<CreateEmployeeResponse>(employee);
@@ -80,6 +82,11 @@ namespace Business.Concretes
             }
 
             return new ErrorDataResult<UpdateEmployeeResponse>("Employee could not be found.");
+        }
+        private async Task CheckIfUserNameNotExist(string userName)
+        {
+            var isExist = await _employeeRepository.GetAsync(user => user.UserName == userName);
+            if (isExist is not null) throw new BusinessException("Username name already exist");
         }
     }
 }

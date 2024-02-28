@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Business.Abstracts;
 using Business.Requests.Aplicants;
 using Business.Responses.Applicants;
 using Business.Responses.Users;
+using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using DataAccess.Repositories;
@@ -29,6 +31,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<CreateApplicantResponse>> AddAsync(CreateApplicantRequest request)
         {
+            await CheckIfUserNameNotExist(request.UserName);
             Applicant applicant = _mapper.Map<Applicant>(request);
             await _applicantRepository.AddAsync(applicant);
             CreateApplicantResponse response = _mapper.Map<CreateApplicantResponse>(applicant);
@@ -38,6 +41,7 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteApplicantRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
             var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
             if (item != null)
             {
@@ -56,9 +60,10 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetApplicantResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<IDataResult<GetApplicantResponse>> GetByIdAsync(GetApplicantRequest request)
+        public async Task<IDataResult<GetApplicantResponse>> GetByIdAsync(Guid id)
         {
-            var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
+            await CheckIfIdNotExist(id);
+            var item = await _applicantRepository.GetAsync(p => p.Id == id);
             if (item != null)
             {
                 GetApplicantResponse response = _mapper.Map<GetApplicantResponse>(item);
@@ -81,6 +86,17 @@ namespace Business.Concretes
             }
 
             return new ErrorDataResult<UpdateApplicantResponse>("Applicant could not be found.");
+        }
+        private async Task CheckIfUserNameNotExist(string userName)
+        {
+            var isExist = await _applicantRepository.GetAsync(user => user.UserName == userName);
+            if (isExist is not null) throw new BusinessException("Username name already exist");
+        }
+
+        private async Task CheckIfIdNotExist(Guid id)
+        {
+            var isExist = await _applicantRepository.GetAsync(user => user.Id == id);
+            if (isExist is null) throw new BusinessException("Id not null");
         }
     }
 }

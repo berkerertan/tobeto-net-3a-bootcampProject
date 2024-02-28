@@ -29,10 +29,10 @@ namespace WebAPI.Controllers
             return Ok(await _applicantService.DeleteAsync(request));
         }
 
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(GetApplicantRequest request)
+        [HttpPost("GetById")]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _applicantService.GetByIdAsync(request);
+            var user = await _applicantService.GetByIdAsync(id);
             return Ok(user);
         }
 

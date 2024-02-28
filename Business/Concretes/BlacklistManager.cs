@@ -54,6 +54,17 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetBlacklistResponse>>(responselist, "Listed Succesfuly.");
         }
 
+        public async Task<IDataResult<GetBlacklistResponse>> GetByApplicantIdAsync(Guid id)
+        {
+            var item = await _blacklistRepository.GetAsync(x=>x.ApplicantId == id);
+            if (item != null)
+            {
+                GetBlacklistResponse response = _mapper.Map<GetBlacklistResponse>(item);
+                return new SuccessDataResult<GetBlacklistResponse>(response, "found Succesfuly.");
+            }
+            return new ErrorDataResult<GetBlacklistResponse>("BlackListed applicant could not be found.");
+        }
+
         public async Task<IDataResult<GetBlacklistResponse>> GetByIdAsync(GetBlacklistRequest request)
         {
             var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
