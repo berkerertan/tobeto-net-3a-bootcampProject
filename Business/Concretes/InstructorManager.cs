@@ -41,13 +41,12 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteInstructorRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
             var item = await _ınstructorRepository.GetAsync(p => p.Id == request.Id);
-            if (item != null)
-            {
-                await _ınstructorRepository.DeleteAsync(item);
-                return new SuccessResult("Deleted Succesfuly");
-            }
-            return new ErrorResult("Delete Failed!");
+
+            await _ınstructorRepository.DeleteAsync(item);
+            return new SuccessResult("Deleted Succesfuly");
+
         }
 
         public async Task<IDataResult<List<GetInstructorResponse>>> GetAll()
@@ -60,35 +59,34 @@ namespace Business.Concretes
 
         public async Task<IDataResult<GetInstructorResponse>> GetByIdAsync(GetInstructorRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
             var item = await _ınstructorRepository.GetAsync(p => p.Id == request.Id);
-            if (item != null)
-            {
-                GetInstructorResponse response = _mapper.Map<GetInstructorResponse>(item);
-                return new SuccessDataResult<GetInstructorResponse>(response, "found Succesfuly.");
-            }
-            return new ErrorDataResult<GetInstructorResponse>("User could not be found.");
+
+            GetInstructorResponse response = _mapper.Map<GetInstructorResponse>(item);
+            return new SuccessDataResult<GetInstructorResponse>(response, "found Succesfuly.");
         }
 
         public async Task<IDataResult<UpdateInstructorResponse>> UpdateAsync(UpdateInstructorRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
+
             var item = await _ınstructorRepository.GetAsync(p => p.Id == request.Id);
+            _mapper.Map(request, item);
+            await _ınstructorRepository.UpdateAsync(item);
+            UpdateInstructorResponse response = _mapper.Map<UpdateInstructorResponse>(item);
 
-            if (item != null)
-            {
-                _mapper.Map(request, item);
-                await _ınstructorRepository.UpdateAsync(item);
-                UpdateInstructorResponse response = _mapper.Map<UpdateInstructorResponse>(item);
-
-                return new SuccessDataResult<UpdateInstructorResponse>(response, "User succesfully updated!");
-            }
-
-            return new ErrorDataResult<UpdateInstructorResponse>("User could not be found.");
+            return new SuccessDataResult<UpdateInstructorResponse>(response, "User succesfully updated!");
         }
 
         private async Task CheckIfUserNameNotExist(string userName)
         {
             var isExist = await _ınstructorRepository.GetAsync(user => user.UserName == userName);
             if (isExist is not null) throw new BusinessException("Username name already exist");
+        }
+        private async Task CheckIfIdNotExist(Guid id)
+        {
+            var isExist = await _ınstructorRepository.GetAsync(user => user.Id == id);
+            if (isExist is null) throw new BusinessException("Id not null");
         }
     }
 }

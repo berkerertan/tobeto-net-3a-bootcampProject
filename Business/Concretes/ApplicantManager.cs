@@ -43,12 +43,11 @@ namespace Business.Concretes
         {
             await CheckIfIdNotExist(request.Id);
             var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
-            if (item != null)
-            {
-                await _applicantRepository.DeleteAsync(item);
-                return new SuccessResult("Deleted Succesfuly");
-            }
-            return new ErrorResult("Delete Failed!");
+
+            await _applicantRepository.DeleteAsync(item);
+            return new SuccessResult("Deleted Succesfuly");
+
+
         }
 
         public async Task<IDataResult<List<GetApplicantResponse>>> GetAllAsync()
@@ -64,28 +63,28 @@ namespace Business.Concretes
         {
             await CheckIfIdNotExist(id);
             var item = await _applicantRepository.GetAsync(p => p.Id == id);
-            if (item != null)
-            {
-                GetApplicantResponse response = _mapper.Map<GetApplicantResponse>(item);
-                return new SuccessDataResult<GetApplicantResponse>(response, "found Succesfuly.");
-            }
-            return new ErrorDataResult<GetApplicantResponse>("Applicant could not be found.");
+
+            GetApplicantResponse response = _mapper.Map<GetApplicantResponse>(item);
+            return new SuccessDataResult<GetApplicantResponse>(response, "found Succesfuly.");
+
+
         }
 
         public async Task<IDataResult<UpdateApplicantResponse>> UpdateAsync(UpdateApplicantRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
+
             var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
 
-            if (item != null)
-            {
-                _mapper.Map(request, item);
-                await _applicantRepository.UpdateAsync(item);
-                UpdateApplicantResponse response = _mapper.Map<UpdateApplicantResponse>(item);
 
-                return new SuccessDataResult<UpdateApplicantResponse>(response, "Applicant succesfully updated!");
-            }
+            _mapper.Map(request, item);
+            await _applicantRepository.UpdateAsync(item);
+            UpdateApplicantResponse response = _mapper.Map<UpdateApplicantResponse>(item);
 
-            return new ErrorDataResult<UpdateApplicantResponse>("Applicant could not be found.");
+            return new SuccessDataResult<UpdateApplicantResponse>(response, "Applicant succesfully updated!");
+
+
+
         }
         private async Task CheckIfUserNameNotExist(string userName)
         {

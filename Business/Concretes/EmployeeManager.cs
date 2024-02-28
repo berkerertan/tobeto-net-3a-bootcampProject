@@ -39,13 +39,12 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteEmployeeRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
             var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
-            if (item != null)
-            {
-                await _employeeRepository.DeleteAsync(item);
-                return new SuccessResult("Deleted Succesfuly");
-            }
-            return new ErrorResult("Delete Failed!");
+
+            await _employeeRepository.DeleteAsync(item);
+            return new SuccessResult("Deleted Succesfuly");
+
         }
 
         public async Task<IDataResult<List<GetEmployeeResponse>>> GetAllAsync()
@@ -59,34 +58,33 @@ namespace Business.Concretes
 
         public async Task<IDataResult<GetEmployeeResponse>> GetByIdAsync(GetEmployeeRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
             var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
-            if (item != null)
-            {
-                GetEmployeeResponse response = _mapper.Map<GetEmployeeResponse>(item);
-                return new SuccessDataResult<GetEmployeeResponse>(response, "found Succesfuly.");
-            }
-            return new ErrorDataResult<GetEmployeeResponse>("Employee could not be found.");
+
+            GetEmployeeResponse response = _mapper.Map<GetEmployeeResponse>(item);
+            return new SuccessDataResult<GetEmployeeResponse>(response, "found Succesfuly.");
         }
 
         public async Task<IDataResult<UpdateEmployeeResponse>> UpdateAsync(UpdateEmployeeRequest request)
         {
+            await CheckIfIdNotExist(request.Id);
             var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
+            _mapper.Map(request, item);
+            await _employeeRepository.UpdateAsync(item);
+            UpdateEmployeeResponse response = _mapper.Map<UpdateEmployeeResponse>(item);
 
-            if (item != null)
-            {
-                _mapper.Map(request, item);
-                await _employeeRepository.UpdateAsync(item);
-                UpdateEmployeeResponse response = _mapper.Map<UpdateEmployeeResponse>(item);
+            return new SuccessDataResult<UpdateEmployeeResponse>(response, "Employee succesfully updated!");
 
-                return new SuccessDataResult<UpdateEmployeeResponse>(response, "Employee succesfully updated!");
-            }
-
-            return new ErrorDataResult<UpdateEmployeeResponse>("Employee could not be found.");
         }
         private async Task CheckIfUserNameNotExist(string userName)
         {
             var isExist = await _employeeRepository.GetAsync(user => user.UserName == userName);
             if (isExist is not null) throw new BusinessException("Username name already exist");
+        }
+        private async Task CheckIfIdNotExist(Guid id)
+        {
+            var isExist = await _employeeRepository.GetAsync(user => user.Id == id);
+            if (isExist is null) throw new BusinessException("Id not null");
         }
     }
 }
