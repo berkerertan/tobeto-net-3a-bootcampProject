@@ -46,8 +46,6 @@ namespace Business.Concretes
 
             await _applicantRepository.DeleteAsync(item);
             return new SuccessResult("Deleted Succesfuly");
-
-
         }
 
         public async Task<IDataResult<List<GetApplicantResponse>>> GetAllAsync()
@@ -95,7 +93,7 @@ namespace Business.Concretes
         private async Task CheckIfIdNotExist(Guid id)
         {
             var isExist = await _applicantRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
+            if (isExist is null || isExist.Id == Guid.Empty) throw new BusinessException("Id not null");
         }
     }
 }

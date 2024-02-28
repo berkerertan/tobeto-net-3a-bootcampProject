@@ -84,7 +84,7 @@ namespace Business.Concretes
         private async Task CheckIfIdNotExist(Guid id)
         {
             var isExist = await _employeeRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
+            if (isExist == null || isExist.Id == Guid.Empty) throw new BusinessException("Id not null");
         }
     }
 }
