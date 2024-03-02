@@ -19,23 +19,28 @@ namespace WebAPI
             builder.Services.AddBusinessServices();
 
 
-                var app = builder.Build();
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
-                    app.ConfigureCustomExceptionMiddleware();
-                }
+            var app = builder.Build();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+                app.ConfigureCustomExceptionMiddleware();
+            }
 
-                app.UseAuthorization();
+            if (app.Environment.IsProduction())
+            {
+                app.ConfigureCustomExceptionMiddleware();
+            }
+
+            app.UseAuthorization();
 
 
-                app.MapControllers();
+            app.MapControllers();
 
-                app.Run();
+            app.Run();
 
-            
+
         }
     }
 }
