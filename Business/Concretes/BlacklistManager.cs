@@ -3,6 +3,7 @@ using Business.Abstracts;
 using Business.Requests.Blacklist;
 using Business.Responses.Applicants;
 using Business.Responses.Blacklist;
+using Business.Rules;
 using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -20,11 +21,13 @@ namespace Business.Concretes
     {
         private readonly IBlacklistRepository _blacklistRepository;
         private readonly IMapper _mapper;
+        private readonly BlacklistBusinessRules _rules;
 
-        public BlacklistManager(IBlacklistRepository blacklistRepository, IMapper mapper)
+        public BlacklistManager(IBlacklistRepository blacklistRepository, IMapper mapper, BlacklistBusinessRules rules)
         {
             _blacklistRepository = blacklistRepository;
             _mapper = mapper;
+            _rules = rules;
         }
 
         public async Task<IDataResult<CreateBlacklistResponse>> AddAsync(CreateBlacklistRequest request)
@@ -38,7 +41,7 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteBlacklistRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfBlacklistIdNotExist(request.Id);
 
             var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
 
@@ -68,7 +71,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<GetBlacklistResponse>> GetByIdAsync(GetBlacklistRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfBlacklistIdNotExist(request.Id);
             var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
 
             GetBlacklistResponse response = _mapper.Map<GetBlacklistResponse>(item);
@@ -79,7 +82,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<UpdateBlacklistResponse>> UpdateAsync(UpdateBlacklistRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfBlacklistIdNotExist(request.Id);
             var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
 
             _mapper.Map(request, item);
@@ -88,10 +91,6 @@ namespace Business.Concretes
 
             return new SuccessDataResult<UpdateBlacklistResponse>(response, "Applicant succesfully updated!");
         }
-        private async Task CheckIfIdNotExist(Guid id)
-        {
-            var isExist = await _blacklistRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
-        }
+        
     }
 }

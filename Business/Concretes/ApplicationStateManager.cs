@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Abstracts;
+using Business.Rules;
 
 namespace Business.Concretes
 {
@@ -19,11 +20,13 @@ namespace Business.Concretes
     {
         private readonly IApplicationStateRepository _applicantStateRepository;
         private readonly IMapper _mapper;
+        private readonly ApplicationStateBusinessRules _rules;
 
-        public ApplicationStateManager(IApplicationStateRepository applicantStateRepository, IMapper mapper)
+        public ApplicationStateManager(IApplicationStateRepository applicantStateRepository, IMapper mapper, ApplicationStateBusinessRules rules)
         {
             _applicantStateRepository = applicantStateRepository;
             _mapper = mapper;
+            _rules = rules;
         }
 
         public async Task<IDataResult<CreateApplicationStateResponse>> AddAsync(CreateApplicationStateRequest request)

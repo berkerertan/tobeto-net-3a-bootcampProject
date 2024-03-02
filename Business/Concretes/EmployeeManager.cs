@@ -3,6 +3,7 @@ using Azure;
 using Business.Abstracts;
 using Business.Requests.Users;
 using Business.Responses.Users;
+using Business.Rules;
 using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -20,16 +21,18 @@ namespace Business.Concretes
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
+        private readonly EmployeeBusinessRules _rules;
 
-        public EmployeeManager(IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeeManager(IEmployeeRepository employeeRepository, IMapper mapper, EmployeeBusinessRules rules)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
+            _rules = rules;
         }
 
         public async Task<IDataResult<CreateEmployeeResponse>> AddAsync(CreateEmployeeRequest request)
         {
-            await CheckIfUserNameNotExist(request.UserName);
+            await _rules.CheckIfEmployeeUserNameNotExist(request.UserName);
             Employee employee = _mapper.Map<Employee>(request);
             await _employeeRepository.AddAsync(employee);
             CreateEmployeeResponse response = _mapper.Map<CreateEmployeeResponse>(employee);
@@ -39,7 +42,7 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteEmployeeRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfEmployeeIdNotExist(request.Id);
             var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
 
             await _employeeRepository.DeleteAsync(item);
@@ -58,7 +61,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<GetEmployeeResponse>> GetByIdAsync(GetEmployeeRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfEmployeeIdNotExist(request.Id);
             var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
 
             GetEmployeeResponse response = _mapper.Map<GetEmployeeResponse>(item);
@@ -67,7 +70,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<UpdateEmployeeResponse>> UpdateAsync(UpdateEmployeeRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfEmployeeIdNotExist(request.Id);
             var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
             _mapper.Map(request, item);
             await _employeeRepository.UpdateAsync(item);
@@ -76,15 +79,6 @@ namespace Business.Concretes
             return new SuccessDataResult<UpdateEmployeeResponse>(response, "Employee succesfully updated!");
 
         }
-        private async Task CheckIfUserNameNotExist(string userName)
-        {
-            var isExist = await _employeeRepository.GetAsync(user => user.UserName == userName);
-            if (isExist is not null) throw new BusinessException("Username name already exist");
-        }
-        private async Task CheckIfIdNotExist(Guid id)
-        {
-            var isExist = await _employeeRepository.GetAsync(user => user.Id == id);
-            if (isExist == null || isExist.Id == Guid.Empty) throw new BusinessException("Id not null");
-        }
+        
     }
 }

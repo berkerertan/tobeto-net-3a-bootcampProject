@@ -2,6 +2,7 @@
 using Business.Abstracts;
 using Business.Requests.Applications;
 using Business.Response.Applications;
+using Business.Rules;
 using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -21,12 +22,14 @@ namespace Business.Concretes
         private readonly IApplicationRepository _applicationRepository;
         private readonly IMapper _mapper;
         private readonly IBlacklistService _blacklistService;
+        private readonly ApplicationBusinessRules _rules;
 
-        public ApplicationManager(IApplicationRepository applicationRepository, IMapper mapper, IBlacklistService blacklistService)
+        public ApplicationManager(IApplicationRepository applicationRepository, IMapper mapper, IBlacklistService blacklistService, ApplicationBusinessRules rules)
         {
             _applicationRepository = applicationRepository;
             _mapper = mapper;
             _blacklistService = blacklistService;
+            _rules = rules;
         }
 
         public async Task<IDataResult<CreateApplicationResponse>> AddAsync(CreateApplicationRequest request)
@@ -43,7 +46,7 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteApplicationRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfApplicationIdNotExist(request.Id);
             var item = await _applicationRepository.GetAsync(p => p.Id == request.Id);
 
             await _applicationRepository.DeleteAsync(item);
@@ -60,7 +63,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<GetApplicationResponse>> GetByIdAsync(GetApplicationRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfApplicationIdNotExist(request.Id);
             var list = await _applicationRepository.GetAllAsync(include: x => x.Include(p => p.Applicant).Include(p => p.Bootcamp).Include(p => p.ApplicationState));
             var item = list.Where(p => p.Id == request.Id).FirstOrDefault();
             GetApplicationResponse response = _mapper.Map<GetApplicationResponse>(item);
@@ -73,7 +76,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<UpdateApplicationResponse>> UpdateAsync(UpdateApplicationRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfApplicationIdNotExist(request.Id);
             var item = await _applicationRepository.GetAsync(p => p.Id == request.Id, include: x => x.Include(p => p.Applicant).Include(p => p.Bootcamp));
             _mapper.Map(request, item);
             await _applicationRepository.UpdateAsync(item);
@@ -82,10 +85,6 @@ namespace Business.Concretes
 
 
         }
-        private async Task CheckIfIdNotExist(Guid id)
-        {
-            var isExist = await _applicationRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
-        }
+
     }
 }

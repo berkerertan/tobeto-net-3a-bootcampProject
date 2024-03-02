@@ -2,6 +2,7 @@
 using Business.Abstracts;
 using Business.Requests.Bootcamps;
 using Business.Response.Bootcamps;
+using Business.Rules;
 using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -20,11 +21,13 @@ namespace Business.Concretes
     {
         private readonly IBootcampRepository _bootcampRepository;
         private readonly IMapper _mapper;
+        private readonly BootcampBusinessRules _rules;
 
-        public BootcampManager(IBootcampRepository bootcampRepository, IMapper mapper)
+        public BootcampManager(IBootcampRepository bootcampRepository, IMapper mapper, BootcampBusinessRules rules)
         {
             _bootcampRepository = bootcampRepository;
             _mapper = mapper;
+            _rules = rules;
         }
 
         public async Task<IDataResult<CreateBootcampResponse>> AddAsync(CreateBootcampRequest request)
@@ -36,7 +39,7 @@ namespace Business.Concretes
 
         public async Task<IResult> DeleteAsync(DeleteBootcampRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfBootcampIdNotExist(request.Id);
             var item = await _bootcampRepository.GetAsync(p => p.Id == request.Id);
 
             await _bootcampRepository.DeleteAsync(item);
@@ -54,7 +57,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<GetBootcampResponse>> GetByIdAsync(GetBootcampRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfBootcampIdNotExist(request.Id);
 
             var item = await _bootcampRepository.GetAsync(p => p.Id == request.Id, include: x => x.Include(p => p.Instructor).Include(p => p.BootcampState));
             GetBootcampResponse response = _mapper.Map<GetBootcampResponse>(item);
@@ -65,7 +68,7 @@ namespace Business.Concretes
 
         public async Task<IDataResult<UpdateBootcampResponse>> UpdateAsync(UpdateBootcampRequest request)
         {
-            await CheckIfIdNotExist(request.Id);
+            await _rules.CheckIfBootcampIdNotExist(request.Id);
             var item = await _bootcampRepository.GetAsync(p => p.Id == request.Id);
 
             _mapper.Map(request, item);
@@ -75,10 +78,6 @@ namespace Business.Concretes
             return new SuccessDataResult<UpdateBootcampResponse>(response, "Bootcamp succesfully updated!");
         }
 
-        private async Task CheckIfIdNotExist(Guid id)
-        {
-            var isExist = await _bootcampRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
-        }
+        
     }
 }
