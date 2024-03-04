@@ -9,6 +9,18 @@ namespace Entities.Concretes
 {
     public class Blacklist : BaseEntity<Guid>
     {
+        public Blacklist()
+        {
+            
+        }
+
+        public Blacklist(string reason, DateTime date, Guid applicantId)
+        {
+            Reason = reason;
+            Date = date;
+            ApplicantId = applicantId;
+        }
+
         public string Reason { get; set; }
         public DateTime Date { get; set; }
         public Guid ApplicantId { get; set; }

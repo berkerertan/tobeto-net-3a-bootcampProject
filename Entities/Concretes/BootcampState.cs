@@ -9,6 +9,15 @@ namespace Entities.Concretes
 {
     public class BootcampState : BaseEntity<Guid>
     {
+        public BootcampState()
+        {
+        }
+
+        public BootcampState(string name)
+        {
+            Name = name;
+        }
+
         public string Name { get; set; }
     }
 }

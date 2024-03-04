@@ -9,6 +9,16 @@ namespace Entities.Concretes
 {
     public class ApplicationState : BaseEntity<Guid>
     {
+        public ApplicationState()
+        {
+            
+        }
+
+        public ApplicationState(string name)
+        {
+            Name = name;
+        }
+
         public string Name { get; set; }
     }
 }

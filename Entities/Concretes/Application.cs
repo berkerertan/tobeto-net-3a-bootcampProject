@@ -10,6 +10,21 @@ namespace Entities.Concretes
 {
     public class Application : BaseEntity<Guid>
     {
+        public Application()
+        {
+            
+        }
+
+        public Application(Guid applicantId, Guid bootcampId, Guid applicationStateId, Applicant applicant, Bootcamp bootcamp, ApplicationState applicationState)
+        {
+            ApplicantId = applicantId;
+            BootcampId = bootcampId;
+            ApplicationStateId = applicationStateId;
+            Applicant = applicant;
+            Bootcamp = bootcamp;
+            ApplicationState = applicationState;
+        }
+
         public Guid ApplicantId { get; set; }
         public Guid BootcampId { get; set; }
         public Guid ApplicationStateId { get; set; }
