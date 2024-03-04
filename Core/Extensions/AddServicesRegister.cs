@@ -5,7 +5,7 @@ namespace Core.Extensions
 {
     public static class AddServicesRegister
     {
-        //DataAccessServiceRegistration ve BusinessServiceRegistration servis Scope'ları burada eklenir
+        //DataAccessServiceRegistration ve BusinessServiceRegistration servis Scope'larını ekler
         public static IServiceCollection AddSubClassesOfType
         (this IServiceCollection services, Assembly assembly,
         Type type, Func<IServiceCollection, Type, IServiceCollection>? addWithLifeCycle = null)

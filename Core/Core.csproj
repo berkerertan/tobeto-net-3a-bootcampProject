@@ -22,6 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.MongoDB" Version="5.4.1" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.6.0" />
   </ItemGroup>
 
 </Project>
