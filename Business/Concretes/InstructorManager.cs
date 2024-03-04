@@ -60,10 +60,10 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetInstructorResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<IDataResult<GetInstructorResponse>> GetByIdAsync(GetInstructorRequest request)
+        public async Task<IDataResult<GetInstructorResponse>> GetByIdAsync(Guid id)
         {
-            await _rules.CheckIfInstructorIdNotExist(request.Id);
-            var item = await _instructorRepository.GetAsync(p => p.Id == request.Id);
+            await _rules.CheckIfInstructorIdNotExist(id);
+            var item = await _instructorRepository.GetAsync(p => p.Id == id);
 
             GetInstructorResponse response = _mapper.Map<GetInstructorResponse>(item);
             return new SuccessDataResult<GetInstructorResponse>(response, "found Succesfuly.");

@@ -59,10 +59,10 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetEmployeeResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<IDataResult<GetEmployeeResponse>> GetByIdAsync(GetEmployeeRequest request)
+        public async Task<IDataResult<GetEmployeeResponse>> GetByIdAsync(Guid id)
         {
-            await _rules.CheckIfEmployeeIdNotExist(request.Id);
-            var item = await _employeeRepository.GetAsync(p => p.Id == request.Id);
+            await _rules.CheckIfEmployeeIdNotExist(id);
+            var item = await _employeeRepository.GetAsync(p => p.Id == id);
 
             GetEmployeeResponse response = _mapper.Map<GetEmployeeResponse>(item);
             return new SuccessDataResult<GetEmployeeResponse>(response, "found Succesfuly.");

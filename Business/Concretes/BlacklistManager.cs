@@ -69,10 +69,10 @@ namespace Business.Concretes
             return new ErrorDataResult<GetBlacklistResponse>("BlackListed applicant could not be found.");
         }
 
-        public async Task<IDataResult<GetBlacklistResponse>> GetByIdAsync(GetBlacklistRequest request)
+        public async Task<IDataResult<GetBlacklistResponse>> GetByIdAsync(Guid id)
         {
-            await _rules.CheckIfBlacklistIdNotExist(request.Id);
-            var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
+            await _rules.CheckIfBlacklistIdNotExist(id);
+            var item = await _blacklistRepository.GetAsync(p => p.Id == id);
 
             GetBlacklistResponse response = _mapper.Map<GetBlacklistResponse>(item);
             return new SuccessDataResult<GetBlacklistResponse>(response, "Found Succesfuly.");

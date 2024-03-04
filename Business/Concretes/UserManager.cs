@@ -53,9 +53,9 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetUserResponse>>(responselist, "Listed Succesfuly.");
         }
 
-        public async Task<IDataResult<GetUserResponse>> GetByIdAsync(GetUserRequest request)
+        public async Task<IDataResult<GetUserResponse>> GetByIdAsync(Guid id)
         {
-            var item = await _userRepository.GetAsync(p => p.Id == request.Id);
+            var item = await _userRepository.GetAsync(p => p.Id == id);
             if (item != null)
             {
                 GetUserResponse response = _mapper.Map<GetUserResponse>(item);

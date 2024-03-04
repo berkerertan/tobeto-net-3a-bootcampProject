@@ -55,11 +55,11 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetBootcampResponse>>(responseList, "Listed Succesfully.");
         }
 
-        public async Task<IDataResult<GetBootcampResponse>> GetByIdAsync(GetBootcampRequest request)
+        public async Task<IDataResult<GetBootcampResponse>> GetByIdAsync(Guid id)
         {
-            await _rules.CheckIfBootcampIdNotExist(request.Id);
+            await _rules.CheckIfBootcampIdNotExist(id);
 
-            var item = await _bootcampRepository.GetAsync(p => p.Id == request.Id, include: x => x.Include(p => p.Instructor).Include(p => p.BootcampState));
+            var item = await _bootcampRepository.GetAsync(p => p.Id == id, include: x => x.Include(p => p.Instructor).Include(p => p.BootcampState));
             GetBootcampResponse response = _mapper.Map<GetBootcampResponse>(item);
 
             return new SuccessDataResult<GetBootcampResponse>(response, "found Succesfully.");

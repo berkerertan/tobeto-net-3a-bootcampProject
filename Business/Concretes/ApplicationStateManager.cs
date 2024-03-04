@@ -55,9 +55,9 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetApplicationStateResponse>>(responseList, "Listed Succesfuly.");
         }
 
-        public async Task<IDataResult<GetApplicationStateResponse>> GetByIdAsync(GetApplicationStateRequest request)
+        public async Task<IDataResult<GetApplicationStateResponse>> GetByIdAsync(Guid id)
         {
-            var item = await _applicantStateRepository.GetAsync(p => p.Id == request.Id);
+            var item = await _applicantStateRepository.GetAsync(p => p.Id == id);
             GetApplicationStateResponse response = _mapper.Map<GetApplicationStateResponse>(item);
 
             if (item != null)

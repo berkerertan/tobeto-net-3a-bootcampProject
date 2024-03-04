@@ -61,11 +61,11 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetApplicationResponse>>(responseList, "Listed Succesfuly.");
         }
 
-        public async Task<IDataResult<GetApplicationResponse>> GetByIdAsync(GetApplicationRequest request)
+        public async Task<IDataResult<GetApplicationResponse>> GetByIdAsync(Guid id)
         {
-            await _rules.CheckIfApplicationIdNotExist(request.Id);
+            await _rules.CheckIfApplicationIdNotExist(id);
             var list = await _applicationRepository.GetAllAsync(include: x => x.Include(p => p.Applicant).Include(p => p.Bootcamp).Include(p => p.ApplicationState));
-            var item = list.Where(p => p.Id == request.Id).FirstOrDefault();
+            var item = list.Where(p => p.Id == id).FirstOrDefault();
             GetApplicationResponse response = _mapper.Map<GetApplicationResponse>(item);
 
 

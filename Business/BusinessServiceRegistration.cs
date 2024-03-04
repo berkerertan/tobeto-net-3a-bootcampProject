@@ -2,6 +2,9 @@
 using Core.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
+using Core.CrossCuttingConcerns.Logging.Serilog;
+using Microsoft.AspNetCore.Http;
 
 namespace Business
 {

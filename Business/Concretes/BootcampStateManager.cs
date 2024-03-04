@@ -53,10 +53,10 @@ public class BootcampStateManager : IBootcampStateService
         return new SuccessDataResult<List<GetBootcampStateResponse>>(responseList, "Listed Succesfuly.");
     }
 
-    public async Task<IDataResult<GetBootcampStateResponse>> GetByIdAsync(GetBootcampStateRequest request)
+    public async Task<IDataResult<GetBootcampStateResponse>> GetByIdAsync(Guid id)
     {
-        await _rules.CheckIfBootcampStateIdNotExist(request.Id);
-        var item = await _bootcampStateRepository.GetAsync(p => p.Id == request.Id);
+        await _rules.CheckIfBootcampStateIdNotExist(id);
+        var item = await _bootcampStateRepository.GetAsync(p => p.Id == id);
         GetBootcampStateResponse response = _mapper.Map<GetBootcampStateResponse>(item);
 
         return new SuccessDataResult<GetBootcampStateResponse>(response, "found Succesfuly.");
