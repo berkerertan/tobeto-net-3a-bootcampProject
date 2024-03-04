@@ -2,6 +2,8 @@ using DataAccess;
 using Business;
 using Business.Abstracts;
 using Core.Exceptions.Extensions;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
 
 namespace WebAPI
 {
@@ -17,6 +19,10 @@ namespace WebAPI
             builder.Services.AddControllers();
             builder.Services.AddDataAccessServices(builder.Configuration);
             builder.Services.AddBusinessServices();
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureContainer<ContainerBuilder>(builder =>
+            {
+                builder.RegisterModule(new AutofacBusinessModule());
+            });
 
 
             var app = builder.Build();
