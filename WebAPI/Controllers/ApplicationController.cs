@@ -16,31 +16,31 @@ namespace WebAPI.Controllers
             _applicationService = applicationService;
         }
 
-        [HttpPost("AddAsync")]
+        [HttpPost("Add")]
         public async Task<IActionResult> AddAsync(CreateApplicationRequest request)
         {
             return Ok(await _applicationService.AddAsync(request));
         }
 
-        [HttpGet("GetAllAsync")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> getAllAsync()
         {
             return Ok(await _applicationService.GetAllAsync());
         }
 
-        [HttpPost("GetByIdAsync")]
-        public async Task<IActionResult> getByIdAsync(GetApplicationRequest request)
+        [HttpPost("GetById")]
+        public async Task<IActionResult> getByIdAsync(Guid id)
         {
-            return Ok(await _applicationService.GetByIdAsync(request));
+            return Ok(await _applicationService.GetByIdAsync(id));
         }
 
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAsync(DeleteApplicationRequest request)
         {
             return Ok(await _applicationService.DeleteAsync(request));
         }
 
-        [HttpPut("UpdateAsync")]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateAsync(UpdateApplicationRequest request)
         {
             return Ok(await _applicationService.UpdateAsync(request));

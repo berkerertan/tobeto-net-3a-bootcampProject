@@ -30,9 +30,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(GetBlacklistRequest request)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _blacklistService.GetByIdAsync(request);
+            var user = await _blacklistService.GetByIdAsync(id);
             return Ok(user);
         }
 

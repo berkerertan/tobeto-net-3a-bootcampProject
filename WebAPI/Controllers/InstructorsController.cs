@@ -31,9 +31,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(GetInstructorRequest request)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return Ok(await _instructorManager.GetByIdAsync(request));
+            return Ok(await _instructorManager.GetByIdAsync(id));
         }
 
         [HttpGet("GetAll")]

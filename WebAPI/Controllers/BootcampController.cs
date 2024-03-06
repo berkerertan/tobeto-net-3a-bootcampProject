@@ -16,31 +16,31 @@ namespace WebAPI.Controllers
             _bootcampService = bootcampService;
         }
 
-        [HttpPost("AddAsync")]
+        [HttpPost("Add")]
         public async Task<IActionResult> AddAsync(CreateBootcampRequest request)
         {
             return Ok(await _bootcampService.AddAsync(request));
         }
 
-        [HttpGet("GetAllAsync")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> getAllAsync()
         {
             return Ok(await _bootcampService.GetAllAsync());
         }
 
-        [HttpPost("GetByIdAsync")]
-        public async Task<IActionResult> getByIdAsync(GetBootcampRequest request)
+        [HttpPost("GetById")]
+        public async Task<IActionResult> getByIdAsync(Guid id)
         {
-            return Ok(await _bootcampService.GetByIdAsync(request));
+            return Ok(await _bootcampService.GetByIdAsync(id));
         }
 
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAsync(DeleteBootcampRequest request)
         {
             return Ok(await _bootcampService.DeleteAsync(request));
         }
 
-        [HttpPut("UpdateAsync")]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateAsync(UpdateBootcampRequest request)
         {
             return Ok(await _bootcampService.UpdateAsync(request));

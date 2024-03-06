@@ -4,6 +4,8 @@ using Business.Abstracts;
 using Core.Exceptions.Extensions;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Business.DependencyResolvers.Autofac;
+
 
 namespace WebAPI
 {
@@ -31,7 +33,7 @@ namespace WebAPI
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.ConfigureCustomExceptionMiddleware();
+                //app.ConfigureCustomExceptionMiddleware();
             }
 
             if (app.Environment.IsProduction())

@@ -32,9 +32,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(GetUserRequest request)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _userManager.GetByIdAsync(request);
+            var user = await _userManager.GetByIdAsync(id);
 
             return Ok(user);
         }
