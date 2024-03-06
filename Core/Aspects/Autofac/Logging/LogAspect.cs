@@ -2,14 +2,11 @@
 using Core.CrossCuttingConcerns.Logging;
 using Core.CrossCuttingConcerns.Logging.Serilog;
 using Core.Utilities.Interceptors;
+using Core.Utilities.IoC;
 using Core.Utilities.Messages;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Aspects.Autofac.Logging
 {
@@ -22,15 +19,18 @@ namespace Core.Aspects.Autofac.Logging
         {
             if (loggerService.BaseType != typeof(LoggerServiceBase))
             {
+                // Eğer verilen tür LoggerServiceBase'den türetilmemişse hata fırlatılır.
                 throw new Exception(AspectMessages.WrongLoggerType);
             }
-            _loggerServiceBase = (LoggerServiceBase)Activator.CreateInstance(loggerService);
-            _httpContextAccessor = (IHttpContextAccessor)Activator.CreateInstance(typeof(HttpContextAccessor));
+            _loggerServiceBase = (LoggerServiceBase)ServiceTool.ServiceProvider.GetRequiredService(loggerService);
+            _httpContextAccessor = ServiceTool.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
         }
 
         protected override void OnBefore(IInvocation invocation)
         {
+            // Bir log kaydı için parametre listesi oluşturuluyor.
             var logParameters = new List<LogParameter>();
+            // Metot argümanlarının hepsi dolaşılıyor.
             for (int i = 0; i < invocation.Arguments.Length; i++)
             {
                 logParameters.Add(new LogParameter
@@ -40,6 +40,7 @@ namespace Core.Aspects.Autofac.Logging
                     Type = invocation.Arguments[i].GetType().Name
                 });
             }
+            // Log detayları oluşturuluyor.
             var logDetail = new LogDetail
             {
                 MethodName = invocation.Method.Name,
@@ -47,6 +48,7 @@ namespace Core.Aspects.Autofac.Logging
                 User = _httpContextAccessor.HttpContext == null || _httpContextAccessor.HttpContext.User.Identity.Name == null
                 ? "?" : _httpContextAccessor.HttpContext.User.Identity.Name
             };
+            // Log detayları JSON formatına dönüştürülüp log servisi aracılığıyla kaydediliyor.
             _loggerServiceBase.Info(JsonConvert.SerializeObject(logDetail));
         }
 

@@ -20,7 +20,6 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
             builder.Property(x => x.ApplicantId).HasColumnName("AplicantId");
 
             builder.HasOne(x => x.Applicant);
-
         }
     }
 }
