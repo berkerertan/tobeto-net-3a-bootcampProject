@@ -8,7 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class EmployeesController : BaseController
     {
         private readonly IEmployeeService _employeeManager;
 
@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Add(CreateEmployeeRequest request)
         {
             var addedEmployee = await _employeeManager.AddAsync(request);
-            return Ok(addedEmployee);
+            return HandleDataResult(addedEmployee);
         }
 
         [HttpDelete("Delete")]
@@ -29,27 +29,27 @@ namespace WebAPI.Controllers
         {
 
 
-            return Ok(await _employeeManager.DeleteAsync(request));
+            return HandleResult(await _employeeManager.DeleteAsync(request));
         }
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _employeeManager.GetByIdAsync(id);
-            return Ok(user);
+            return HandleDataResult(user);
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _employeeManager.GetAllAsync();
-            return Ok(users);
+            return HandleDataResult(users);
         }
 
         [HttpPut("Update")]
         public async Task<IActionResult> Update(UpdateEmployeeRequest request)
         {
-            return Ok(await _employeeManager.UpdateAsync(request));
+            return HandleDataResult(await _employeeManager.UpdateAsync(request));
         }
     }
 }

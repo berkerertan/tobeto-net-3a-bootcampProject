@@ -8,7 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InstructorsController : ControllerBase
+    public class InstructorsController : BaseController
     {
         private readonly IInstructorService _instructorManager;
 
@@ -20,33 +20,33 @@ namespace WebAPI.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add(CreateInstructorRequest request)
         {
-            await _instructorManager.AddAsync(request);
-            return Ok();
+            
+            return HandleDataResult(await _instructorManager.AddAsync(request));
         }
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(DeleteInstructorRequest request)
         {
-            return Ok(await _instructorManager.DeleteAsync(request));
+            return HandleResult(await _instructorManager.DeleteAsync(request));
         }
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            return Ok(await _instructorManager.GetByIdAsync(id));
+            return HandleDataResult(await _instructorManager.GetByIdAsync(id));
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _instructorManager.GetAll();
-            return Ok(users);
+            return HandleDataResult(users);
         }
 
         [HttpPut("Update")]
         public async Task<IActionResult> Update(UpdateInstructorRequest request)
         {
-            return Ok(await _instructorManager.UpdateAsync(request));
+            return HandleDataResult(await _instructorManager.UpdateAsync(request));
         }
     }
 }

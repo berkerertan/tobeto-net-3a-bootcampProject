@@ -7,7 +7,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BootcampStateController : ControllerBase
+    public class BootcampStateController : BaseController
     {
         private readonly IBootcampStateService _bootcampStateService;
 
@@ -19,31 +19,31 @@ namespace WebAPI.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> AddAsync(CreateBootcampStateRequest request)
         {
-            return Ok(await _bootcampStateService.AddAsync(request));
+            return HandleDataResult(await _bootcampStateService.AddAsync(request));
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> getAllAsync()
         {
-            return Ok(await _bootcampStateService.GetAllAsync());
+            return HandleDataResult(await _bootcampStateService.GetAllAsync());
         }
 
         [HttpPost("GetById")]
         public async Task<IActionResult> getByIdAsync(Guid id)
         {
-            return Ok(await _bootcampStateService.GetByIdAsync(id));
+            return HandleDataResult(await _bootcampStateService.GetByIdAsync(id));
         }
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAsync(DeleteBootcampStateRequest request)
         {
-            return Ok(await _bootcampStateService.DeleteAsync(request));
+            return HandleResult(await _bootcampStateService.DeleteAsync(request));
         }
 
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateAsync(UpdateBootcampStateRequest request)
         {
-            return Ok(await _bootcampStateService.UpdateAsync(request));
+            return HandleDataResult(await _bootcampStateService.UpdateAsync(request));
         }
     }
 }

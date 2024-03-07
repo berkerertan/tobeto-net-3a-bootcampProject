@@ -20,33 +20,33 @@ namespace WebAPI.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add(CreateBlacklistRequest request)
         {
-            return Ok(await _blacklistService.AddAsync(request));
+            return HandleDataResult(await _blacklistService.AddAsync(request));
         }
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(DeleteBlacklistRequest request)
         {
-            return Ok(await _blacklistService.DeleteAsync(request));
+            return HandleResult(await _blacklistService.DeleteAsync(request));
         }
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _blacklistService.GetByIdAsync(id);
-            return Ok(user);
+            return HandleDataResult(user);
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _blacklistService.GetAllAsync();
-            return Ok(users);
+            return HandleDataResult(users);
         }
 
         [HttpPut("Update")]
         public async Task<IActionResult> Update(UpdateBlacklistRequest request)
         {
-            return Ok(await _blacklistService.UpdateAsync(request));
+            return HandleDataResult(await _blacklistService.UpdateAsync(request));
         }
     }
 }
