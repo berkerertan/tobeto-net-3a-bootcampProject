@@ -8,6 +8,7 @@ namespace Business.Responses.ApplicationStates
 {
     public class CreateApplicationStateResponse
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
     }

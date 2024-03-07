@@ -8,6 +8,7 @@ namespace Business.Responses.BootcampStates
 {
     public class CreateBootcampStateResponse
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
     }
