@@ -1,6 +1,8 @@
-﻿using Core.CrossCuttingConcerns.Rules;
+﻿using Business.Constants;
+using Core.CrossCuttingConcerns.Rules;
 using Core.Exceptions.Types;
 using DataAccess.Abstracts;
+using DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +23,18 @@ namespace Business.Rules
         public async Task CheckIfInstructorUserNameNotExist(string userName)
         {
             var isExist = await _instructorRepository.GetAsync(user => user.UserName == userName);
-            if (isExist is not null) throw new BusinessException("Username name already exist");
+            if (isExist is not null) throw new BusinessException(BaseMessages.SameName);
         }
+        public async Task CheckIfInstructorIdAlreadyExist(Guid id)
+        {
+            var isExist = await _instructorRepository.GetAsync(x => x.Id == id);
+            if (isExist is not null || id != Guid.Empty) throw new BusinessException(BaseMessages.AlreadyExist);
+        }
+
         public async Task CheckIfInstructorIdNotExist(Guid id)
         {
-            var isExist = await _instructorRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
+            var isExist = await _instructorRepository.GetAsync(x => x.Id == id);
+            if (isExist is null || id == Guid.Empty) throw new BusinessException(BaseMessages.NotExist);
         }
     }
 }

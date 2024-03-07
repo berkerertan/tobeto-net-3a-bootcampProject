@@ -1,6 +1,8 @@
-﻿using Core.CrossCuttingConcerns.Rules;
+﻿using Business.Constants;
+using Core.CrossCuttingConcerns.Rules;
 using Core.Exceptions.Types;
 using DataAccess.Abstracts;
+using DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +20,21 @@ namespace Business.Rules
             _bootcampStateRepository = bootcampStateRepository;
         }
 
+        public async Task CheckIfBootcampStateIdAlreadyExist(Guid id)
+        {
+            var isExist = await _bootcampStateRepository.GetAsync(x => x.Id == id);
+            if (isExist is not null || id != Guid.Empty) throw new BusinessException(BaseMessages.AlreadyExist);
+        }
+
         public async Task CheckIfBootcampStateIdNotExist(Guid id)
         {
-            var isExist = await _bootcampStateRepository.GetAsync(user => user.Id == id);
-            if (isExist is null) throw new BusinessException("Id not null");
+            var isExist = await _bootcampStateRepository.GetAsync(x => x.Id == id);
+            if (isExist is null || id == Guid.Empty) throw new BusinessException(BaseMessages.NotExist);
+        }
+        public async Task CheckIfBootcampStateNameHave(string name)
+        {
+            var isExist = await _bootcampStateRepository.GetAsync(x => x.Name == name);
+            if (isExist is not null) throw new BusinessException(BaseMessages.SameName);
         }
     }
 }
