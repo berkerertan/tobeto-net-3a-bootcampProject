@@ -1,1 +1,1 @@
-# tobeto-net-3a-bootcampProject
+Tobeto eğitim platformu projesi
