@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Constants
 {
-    public class BlacklistMessages
+    public class BlacklistMessages : BaseMessages
     {
-        public static string BlacklistAdded = "Blacklist Added Successfully";
-        public static string BlacklistDeleted = "Blacklist Deleted Successfully";
-        public static string BlacklistUpdated = "Blacklist Updated Successfully";
-        public static string BlacklistNotFound = "Blacklist Not Found";
     }
 }

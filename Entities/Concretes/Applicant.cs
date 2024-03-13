@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,8 @@ namespace Entities.Concretes
         {
             
         }
-        public Applicant(string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, string password, string about)
+        public Applicant(string userName, string firstName, string lastName, DateTime dateOfBirth, string nationalIdentity, string email, 
+            byte[] passwordHash,byte[] passwordSalt, string about)
         {
 
             UserName = userName;
@@ -21,7 +23,8 @@ namespace Entities.Concretes
             DateOfBirth = dateOfBirth;
             NationalIdentity = nationalIdentity;
             Email = email;
-            Password = password;
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
             About = about;
         }
 

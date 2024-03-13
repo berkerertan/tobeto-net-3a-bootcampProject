@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Constants
 {
-    public class ApplicationMessages
+    public class ApplicationMessages : BaseMessages
     {
-        public static string ApplicationAdded = "Application Added Successfully";
-        public static string ApplicationDeleted = "Application Deleted Successfully";
-        public static string ApplicationUpdated = "Application Updated Successfully";
-        public static string ApplicationNotFound = "Application Not Found";
     }
 }

@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
 using Business.Abstracts;
+using Business.Constants;
 using Business.Requests.Blacklist;
-using Business.Responses.Applicants;
 using Business.Responses.Blacklist;
 using Business.Rules;
-using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
-using DataAccess.Repositories;
 using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concretes
 {
@@ -30,67 +24,56 @@ namespace Business.Concretes
             _rules = rules;
         }
 
+        //[LogAspect(typeof(MssqlLogger))]
         public async Task<IDataResult<CreateBlacklistResponse>> AddAsync(CreateBlacklistRequest request)
         {
+            await _rules.CheckIfBlacklistIdAlreadyExist(request.ApplicantId);
             Blacklist blacklist = _mapper.Map<Blacklist>(request);
             await _blacklistRepository.AddAsync(blacklist);
             CreateBlacklistResponse response = _mapper.Map<CreateBlacklistResponse>(blacklist);
-
-            return new SuccessDataResult<CreateBlacklistResponse>(response, "Added Succesfuly");
+            return new SuccessDataResult<CreateBlacklistResponse>(response, BaseMessages.Added);
         }
 
         public async Task<IResult> DeleteAsync(DeleteBlacklistRequest request)
         {
             await _rules.CheckIfBlacklistIdNotExist(request.Id);
-
             var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
-
             await _blacklistRepository.DeleteAsync(item);
-            return new SuccessResult("Deleted Succesfuly");
-
+            return new SuccessResult(BaseMessages.Deleted);
         }
 
         public async Task<IDataResult<List<GetBlacklistResponse>>> GetAllAsync()
         {
-            var list = await _blacklistRepository.GetAllAsync();
+            var list = await _blacklistRepository.GetAllAsync(include: x => x.Include(x => x.Applicant));
             List<GetBlacklistResponse> responselist = _mapper.Map<List<GetBlacklistResponse>>(list);
-
-            return new SuccessDataResult<List<GetBlacklistResponse>>(responselist, "Listed Succesfuly.");
+            return new SuccessDataResult<List<GetBlacklistResponse>>(responselist, BaseMessages.GetAll);
         }
 
-        public async Task<IDataResult<GetBlacklistResponse>> GetByApplicantIdAsync(Guid id)
+        public async Task<IDataResult<GetBlacklistResponse>> CheckIfApplicantIsBlacklisted(Guid id)
         {
+            //await _rules.CheckIfBlacklistIdNotExist(id);
             var item = await _blacklistRepository.GetAsync(x => x.ApplicantId == id);
-            if (item != null)
-            {
-                GetBlacklistResponse response = _mapper.Map<GetBlacklistResponse>(item);
-                return new SuccessDataResult<GetBlacklistResponse>(response, "found Succesfuly.");
-            }
-            return new ErrorDataResult<GetBlacklistResponse>("BlackListed applicant could not be found.");
+            GetBlacklistResponse response = _mapper.Map<GetBlacklistResponse>(item);
+            return new SuccessDataResult<GetBlacklistResponse>(response, "found Succesfuly.");
         }
 
         public async Task<IDataResult<GetBlacklistResponse>> GetByIdAsync(Guid id)
         {
             await _rules.CheckIfBlacklistIdNotExist(id);
-            var item = await _blacklistRepository.GetAsync(p => p.Id == id);
-
+            var item = await _blacklistRepository.GetAsync(p => p.Id == id, include: a => a.Include(x => x.Applicant));
             GetBlacklistResponse response = _mapper.Map<GetBlacklistResponse>(item);
-            return new SuccessDataResult<GetBlacklistResponse>(response, "Found Succesfuly.");
-
-
+            return new SuccessDataResult<GetBlacklistResponse>(response, BaseMessages.GetById);
         }
 
         public async Task<IDataResult<UpdateBlacklistResponse>> UpdateAsync(UpdateBlacklistRequest request)
         {
             await _rules.CheckIfBlacklistIdNotExist(request.Id);
             var item = await _blacklistRepository.GetAsync(p => p.Id == request.Id);
-
             _mapper.Map(request, item);
             await _blacklistRepository.UpdateAsync(item);
             UpdateBlacklistResponse response = _mapper.Map<UpdateBlacklistResponse>(item);
-
-            return new SuccessDataResult<UpdateBlacklistResponse>(response, "Applicant succesfully updated!");
+            return new SuccessDataResult<UpdateBlacklistResponse>(response, BaseMessages.Updated);
         }
-        
+
     }
 }

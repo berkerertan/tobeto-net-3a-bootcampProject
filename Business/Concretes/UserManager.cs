@@ -2,6 +2,7 @@
 using Business.Abstracts;
 using Business.Requests.Users;
 using Business.Responses.Users;
+using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -53,6 +54,11 @@ namespace Business.Concretes
             return new SuccessDataResult<List<GetUserResponse>>(responselist, "Listed Succesfuly.");
         }
 
+        public async Task<DataResult<User>> GetById(Guid id)
+        {
+            return new SuccessDataResult<User>(await _userRepository.GetAsync(x => x.Id == id));
+        }
+
         public async Task<IDataResult<GetUserResponse>> GetByIdAsync(Guid id)
         {
             var item = await _userRepository.GetAsync(p => p.Id == id);
@@ -62,6 +68,11 @@ namespace Business.Concretes
                 return new SuccessDataResult<GetUserResponse>(response, "found Succesfuly.");
             }
             return new ErrorDataResult<GetUserResponse>("User could not be found.");
+        }
+
+        public async Task<DataResult<User>> GetByMail(string email)
+        {
+            return new SuccessDataResult<User>(await _userRepository.GetAsync(x => x.Email == email));
         }
 
         public async Task<IDataResult<UpdateUserResponse>> UpdateAsync(UpdateUserRequest request)

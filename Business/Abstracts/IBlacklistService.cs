@@ -18,6 +18,6 @@ namespace Business.Abstracts
         public Task<IDataResult<GetBlacklistResponse>> GetByIdAsync(Guid id);
         public Task<IDataResult<UpdateBlacklistResponse>> UpdateAsync(UpdateBlacklistRequest request);
         public Task<IResult> DeleteAsync(DeleteBlacklistRequest request);
-        Task<IDataResult<GetBlacklistResponse>> GetByApplicantIdAsync(Guid id);
+        public Task<IDataResult<GetBlacklistResponse>> CheckIfApplicantIsBlacklisted(Guid id);
     }
 }

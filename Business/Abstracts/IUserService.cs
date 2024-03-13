@@ -1,5 +1,6 @@
 ﻿using Business.Requests.Users;
 using Business.Responses.Users;
+using Core.Entities;
 using Core.Utilities.Results;
 using Entities.Concretes;
 using System;
@@ -17,5 +18,7 @@ namespace Business.Abstracts
         public Task<IResult> DeleteAsync(DeleteUserRequest request);
         public Task<IDataResult<List<GetUserResponse>>> GetAllAsync();
         public Task<IDataResult<GetUserResponse>> GetByIdAsync(Guid id);
+        public Task<DataResult<User>> GetById(Guid id);
+        public Task<DataResult<User>> GetByMail(string email);
     }
 }

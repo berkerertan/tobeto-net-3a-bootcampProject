@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Constants
 {
-    public class UserMessages
+    public class UserMessages : BaseMessages
     {
-        public static string UserAdded = "User Added Successfully";
-        public static string UserDeleted = "User Deleted Successfully";
-        public static string UserUpdated = "User Updated Successfully";
-        public static string UserNotFound = "User Not Found";
     }
 }

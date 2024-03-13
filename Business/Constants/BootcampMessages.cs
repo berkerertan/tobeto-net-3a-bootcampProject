@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Constants
 {
-    public class BootcampMessages
+    public class BootcampMessages : BaseMessages
     {
-        public static string BootcampAdded = "Bootcamp Added Successfully";
-        public static string BootcampDeleted = "Bootcamp Deleted Successfully";
-        public static string BootcampUpdated = "Bootcamp Updated Successfully";
-        public static string BootcampNotFound = "Bootcamp Not Found";
     }
 }

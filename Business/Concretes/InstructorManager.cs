@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Business.Abstracts;
+using Business.Constants;
 using Business.Requests.Instructors;
 using Business.Responses.Instructors;
 using Business.Responses.Users;
 using Business.Rules;
+using Core.Aspects.Autofac.Logging;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -32,53 +35,47 @@ namespace Business.Concretes
             _rules = rules;
         }
 
+        //[LogAspect(typeof(MssqlLogger))]
         public async Task<IDataResult<CreateInstructorResponse>> AddAsync(CreateInstructorRequest request)
         {
             await _rules.CheckIfInstructorUserNameNotExist(request.UserName);
             Instructor user = _mapper.Map<Instructor>(request);
             await _instructorRepository.AddAsync(user);
             CreateInstructorResponse response = _mapper.Map<CreateInstructorResponse>(user);
-
-            return new SuccessDataResult<CreateInstructorResponse>(response, "Added Succesfuly");
+            return new SuccessDataResult<CreateInstructorResponse>(response, BaseMessages.Added);
         }
 
         public async Task<IResult> DeleteAsync(DeleteInstructorRequest request)
         {
             await _rules.CheckIfInstructorIdNotExist(request.Id);
             var item = await _instructorRepository.GetAsync(p => p.Id == request.Id);
-
             await _instructorRepository.DeleteAsync(item);
-            return new SuccessResult("Deleted Succesfuly");
-
+            return new SuccessResult(BaseMessages.Deleted);
         }
 
         public async Task<IDataResult<List<GetInstructorResponse>>> GetAll()
         {
             var list = await _instructorRepository.GetAllAsync();
             List<GetInstructorResponse> responselist = _mapper.Map<List<GetInstructorResponse>>(list);
-
-            return new SuccessDataResult<List<GetInstructorResponse>>(responselist, "Listed Succesfuly.");
+            return new SuccessDataResult<List<GetInstructorResponse>>(responselist, BaseMessages.GetAll);
         }
 
         public async Task<IDataResult<GetInstructorResponse>> GetByIdAsync(Guid id)
         {
             await _rules.CheckIfInstructorIdNotExist(id);
             var item = await _instructorRepository.GetAsync(p => p.Id == id);
-
             GetInstructorResponse response = _mapper.Map<GetInstructorResponse>(item);
-            return new SuccessDataResult<GetInstructorResponse>(response, "found Succesfuly.");
+            return new SuccessDataResult<GetInstructorResponse>(response, BaseMessages.GetById);
         }
 
         public async Task<IDataResult<UpdateInstructorResponse>> UpdateAsync(UpdateInstructorRequest request)
         {
             await _rules.CheckIfInstructorIdNotExist(request.Id);
-
             var item = await _instructorRepository.GetAsync(p => p.Id == request.Id);
             _mapper.Map(request, item);
             await _instructorRepository.UpdateAsync(item);
             UpdateInstructorResponse response = _mapper.Map<UpdateInstructorResponse>(item);
-
-            return new SuccessDataResult<UpdateInstructorResponse>(response, "User succesfully updated!");
+            return new SuccessDataResult<UpdateInstructorResponse>(response, BaseMessages.Updated);
         }
 
         

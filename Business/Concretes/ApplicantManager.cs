@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using Business.Abstracts;
+using Business.Constants;
 using Business.Requests.Aplicants;
 using Business.Responses.Applicants;
 using Business.Responses.Users;
 using Business.Rules;
+using Core.Aspects.Autofac.Logging;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Exceptions.Types;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
@@ -32,60 +35,48 @@ namespace Business.Concretes
             _rules = rules;
         }
 
+        //[LogAspect(typeof(MssqlLogger))]
         public async Task<IDataResult<CreateApplicantResponse>> AddAsync(CreateApplicantRequest request)
         {
             await _rules.CheckIfApplicantUserNameNotExist(request.UserName);
             Applicant applicant = _mapper.Map<Applicant>(request);
             await _applicantRepository.AddAsync(applicant);
             CreateApplicantResponse response = _mapper.Map<CreateApplicantResponse>(applicant);
-
-            return new SuccessDataResult<CreateApplicantResponse>(response, "Added Succesfuly");
+            return new SuccessDataResult<CreateApplicantResponse>(response, BaseMessages.Added);
         }
 
         public async Task<IResult> DeleteAsync(DeleteApplicantRequest request)
         {
             await _rules.CheckIfApplicantIdNotExist(request.Id);
             var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
-
             await _applicantRepository.DeleteAsync(item);
-            return new SuccessResult("Deleted Succesfuly");
+            return new SuccessResult(BaseMessages.Deleted);
         }
 
+        //[LogAspect(typeof(MssqlLogger))]
         public async Task<IDataResult<List<GetApplicantResponse>>> GetAllAsync()
         {
-
             var list = await _applicantRepository.GetAllAsync();
             List<GetApplicantResponse> responselist = _mapper.Map<List<GetApplicantResponse>>(list);
-
-            return new SuccessDataResult<List<GetApplicantResponse>>(responselist, "Listed Succesfuly.");
+            return new SuccessDataResult<List<GetApplicantResponse>>(responselist, BaseMessages.GetAll);
         }
 
         public async Task<IDataResult<GetApplicantResponse>> GetByIdAsync(Guid id)
         {
             await _rules.CheckIfApplicantIdNotExist(id);
             var item = await _applicantRepository.GetAsync(p => p.Id == id);
-
             GetApplicantResponse response = _mapper.Map<GetApplicantResponse>(item);
-            return new SuccessDataResult<GetApplicantResponse>(response, "found Succesfuly.");
-
-
+            return new SuccessDataResult<GetApplicantResponse>(response, BaseMessages.GetById);
         }
 
         public async Task<IDataResult<UpdateApplicantResponse>> UpdateAsync(UpdateApplicantRequest request)
         {
             await _rules.CheckIfApplicantIdNotExist(request.Id);
-
             var item = await _applicantRepository.GetAsync(p => p.Id == request.Id);
-
-
             _mapper.Map(request, item);
             await _applicantRepository.UpdateAsync(item);
             UpdateApplicantResponse response = _mapper.Map<UpdateApplicantResponse>(item);
-
-            return new SuccessDataResult<UpdateApplicantResponse>(response, "Applicant succesfully updated!");
-
-
-
+            return new SuccessDataResult<UpdateApplicantResponse>(response, BaseMessages.Updated);
         }
         
     }

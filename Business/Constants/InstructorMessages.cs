@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Constants
 {
-    public class InstructorMessages
+    public class InstructorMessages : BaseMessages
     {
-        public static string InstructorAdded = "Instructor Added Successfully";
-        public static string InstructorDeleted = "Instructor Deleted Successfully";
-        public static string InstructorUpdated = "Instructor Updated Successfully";
-        public static string InstructorNotFound = "Instructor Not Found";
-
     }
 }

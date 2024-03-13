@@ -1,11 +1,6 @@
-﻿using Entities.Concretes;
+﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
 {
@@ -21,9 +16,12 @@ namespace DataAccess.Concretes.EntityFramework.EntityTypeConfigurations
             builder.Property(x => x.DateOfBirth).HasColumnName("DateOfBirth");
             builder.Property(x => x.NationalIdentity).HasColumnName("NationalIdentity");
             builder.Property(x => x.Email).HasColumnName("Email");
-            builder.Property(x => x.Password).HasColumnName("Password");
+            builder.Property(x => x.PasswordHash).HasColumnName("PasswordHash");
+            builder.Property(x => x.PasswordSalt).HasColumnName("PasswordSalt");
 
-            builder.HasMany(x => x.UserImages);
+
+            //builder.HasMany(x => x.UserImage);
+            builder.HasMany(t => t.UserOperationClaims);
 
         }
     }

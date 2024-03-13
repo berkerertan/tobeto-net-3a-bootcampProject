@@ -2,6 +2,7 @@
 using Business.Requests.Aplicants;
 using Business.Responses.Applicants;
 using Entities.Concretes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -37,6 +38,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "aplicant.list")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _applicantService.GetAllAsync();

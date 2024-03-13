@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Abstracts;
 using Business.Rules;
+using Azure.Core;
+using Business.Constants;
 
 namespace Business.Concretes
 {
@@ -31,55 +33,44 @@ namespace Business.Concretes
 
         public async Task<IDataResult<CreateApplicationStateResponse>> AddAsync(CreateApplicationStateRequest request)
         {
+            await _rules.CheckIfApplicationStateNameHave(request.Name);
             ApplicationState applicationState = _mapper.Map<ApplicationState>(request);
             await _applicantStateRepository.AddAsync(applicationState);
-            return new SuccessDataResult<CreateApplicationStateResponse>("Added Succesfuly");
+            return new SuccessDataResult<CreateApplicationStateResponse>(BaseMessages.Added);
         }
 
         public async Task<IResult> DeleteAsync(DeleteApplicationStateRequest request)
         {
+            await _rules.CheckIfApplicationStateIdNotExist(request.Id);
             var item = await _applicantStateRepository.GetAsync(p => p.Id == request.Id);
-            if (item != null)
-            {
-                await _applicantStateRepository.DeleteAsync(item);
-                return new SuccessResult("Deleted Succesfuly");
-            }
-
-            return new ErrorResult("Delete Failed!");
+            await _applicantStateRepository.DeleteAsync(item);
+            return new SuccessResult(BaseMessages.Deleted);
         }
 
         public async Task<IDataResult<List<GetApplicationStateResponse>>> GetAllAsync()
         {
             var list = await _applicantStateRepository.GetAllAsync();
             List<GetApplicationStateResponse> responseList = _mapper.Map<List<GetApplicationStateResponse>>(list);
-            return new SuccessDataResult<List<GetApplicationStateResponse>>(responseList, "Listed Succesfuly.");
+            return new SuccessDataResult<List<GetApplicationStateResponse>>(responseList, BaseMessages.GetAll);
         }
 
         public async Task<IDataResult<GetApplicationStateResponse>> GetByIdAsync(Guid id)
         {
+            await _rules.CheckIfApplicationStateIdNotExist(id);
             var item = await _applicantStateRepository.GetAsync(p => p.Id == id);
             GetApplicationStateResponse response = _mapper.Map<GetApplicationStateResponse>(item);
-
-            if (item != null)
-            {
-                return new SuccessDataResult<GetApplicationStateResponse>(response, "found Succesfuly.");
-            }
-            return new ErrorDataResult<GetApplicationStateResponse>("ApplicationState could not be found.");
+            return new SuccessDataResult<GetApplicationStateResponse>(response, BaseMessages.GetById);
         }
 
         public async Task<IDataResult<UpdateApplicationStateResponse>> UpdateAsync(UpdateApplicationStateRequest request)
         {
+            await _rules.CheckIfApplicationStateIdNotExist(request.Id);
             var item = await _applicantStateRepository.GetAsync(p => p.Id == request.Id);
-            if (request.Id == null || item == null)
-            {
-                return new ErrorDataResult<UpdateApplicationStateResponse>("ApplicationState could not be found.");
-            }
-
             _mapper.Map(request, item);
             await _applicantStateRepository.UpdateAsync(item);
 
             UpdateApplicationStateResponse response = _mapper.Map<UpdateApplicationStateResponse>(item);
-            return new SuccessDataResult<UpdateApplicationStateResponse>(response, "ApplicationState succesfully updated!");
+            return new SuccessDataResult<UpdateApplicationStateResponse>(response, BaseMessages.Updated);
         }
     }
 }

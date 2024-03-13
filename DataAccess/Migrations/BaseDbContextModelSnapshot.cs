@@ -22,6 +22,127 @@ namespace DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Core.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateOfBirth");
+
+                    b.Property<DateTime>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LastName");
+
+                    b.Property<string>("NationalIdentity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NationalIdentity");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("PasswordHash");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("PasswordSalt");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Core.Utilities.Security.Entities.OperationClaim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Utilities.Security.Entities.UserOperationClaim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OperationClaimId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("OperationClaimId");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationClaimId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOperationClaims", (string)null);
+                });
+
             modelBuilder.Entity("Entities.Concretes.Application", b =>
                 {
                     b.Property<Guid>("Id")
@@ -196,63 +317,6 @@ namespace DataAccess.Migrations
                     b.ToTable("BootcampStates", (string)null);
                 });
 
-            modelBuilder.Entity("Entities.Concretes.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DateOfBirth");
-
-                    b.Property<DateTime>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Email");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("FirstName");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("LastName");
-
-                    b.Property<string>("NationalIdentity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("NationalIdentity");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Password");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("UserName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users", (string)null);
-
-                    b.UseTptMappingStrategy();
-                });
-
             modelBuilder.Entity("Entities.Concretes.UserImage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -284,7 +348,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>
                 {
-                    b.HasBaseType("Entities.Concretes.User");
+                    b.HasBaseType("Core.Entities.User");
 
                     b.Property<string>("About")
                         .IsRequired()
@@ -296,7 +360,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Employee", b =>
                 {
-                    b.HasBaseType("Entities.Concretes.User");
+                    b.HasBaseType("Core.Entities.User");
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -308,7 +372,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Instructor", b =>
                 {
-                    b.HasBaseType("Entities.Concretes.User");
+                    b.HasBaseType("Core.Entities.User");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -316,6 +380,25 @@ namespace DataAccess.Migrations
                         .HasColumnName("CompanyName");
 
                     b.ToTable("Instructors", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Utilities.Security.Entities.UserOperationClaim", b =>
+                {
+                    b.HasOne("Core.Utilities.Security.Entities.OperationClaim", "OperationClaim")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("OperationClaimId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.User", "User")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Concretes.Application", b =>
@@ -377,8 +460,8 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.UserImage", b =>
                 {
-                    b.HasOne("Entities.Concretes.User", "User")
-                        .WithMany("UserImages")
+                    b.HasOne("Core.Entities.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -388,7 +471,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>
                 {
-                    b.HasOne("Entities.Concretes.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithOne()
                         .HasForeignKey("Entities.Concretes.Applicant", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -397,7 +480,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Employee", b =>
                 {
-                    b.HasOne("Entities.Concretes.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithOne()
                         .HasForeignKey("Entities.Concretes.Employee", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -406,21 +489,26 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concretes.Instructor", b =>
                 {
-                    b.HasOne("Entities.Concretes.User", null)
+                    b.HasOne("Core.Entities.User", null)
                         .WithOne()
                         .HasForeignKey("Entities.Concretes.Instructor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Core.Entities.User", b =>
+                {
+                    b.Navigation("UserOperationClaims");
+                });
+
+            modelBuilder.Entity("Core.Utilities.Security.Entities.OperationClaim", b =>
+                {
+                    b.Navigation("UserOperationClaims");
+                });
+
             modelBuilder.Entity("Entities.Concretes.Bootcamp", b =>
                 {
                     b.Navigation("Applications");
-                });
-
-            modelBuilder.Entity("Entities.Concretes.User", b =>
-                {
-                    b.Navigation("UserImages");
                 });
 
             modelBuilder.Entity("Entities.Concretes.Applicant", b =>

@@ -1,20 +1,14 @@
 ﻿using Core.DataAccess.EntityFramework;
+using Core.Entities;
 using DataAccess.Abstracts;
 using DataAccess.Concretes.EntityFramework.Contexts;
-using Entities.Concretes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataAccess.Repositories
+namespace DataAccess.Repositories;
+
+public class UserRepository : EfRepositoryBase<User, Guid, BaseDbContext>,IUserRepository
 {
-    public class UserRepository : EfRepositoryBase<User, Guid, BaseDbContext>,IUserRepository
+    public UserRepository(BaseDbContext context) : base(context)
     {
-        public UserRepository(BaseDbContext context) : base(context)
-        {
-            
-        }
+        
     }
 }
